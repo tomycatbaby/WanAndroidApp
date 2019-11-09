@@ -38,7 +38,7 @@ public class MainActivity extends BaseActivity {
     private int FRAGMENT_NAVIGATION = 0x03;
     private int FRAGMENT_PROJECT = 0x04;
     private int FRAGMENT_WECHAT = 0x05;
-
+    private boolean isBottomShow = true;
     private Toolbar toolbar;
 
     @Override

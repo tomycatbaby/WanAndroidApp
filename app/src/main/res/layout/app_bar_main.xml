@@ -39,5 +39,6 @@
         android:layout_gravity="bottom"
         android:background="@color/viewBackground"
         app:elevation="@dimen/dp_16"
+        app:layout_behavior=".widget.BottomNavigationBehavior"
         app:menu="@menu/bottom_navigation_main" />
 </android.support.design.widget.CoordinatorLayout>

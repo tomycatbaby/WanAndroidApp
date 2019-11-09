@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -68,17 +69,18 @@ public class HomeFragment extends Fragment {
             @Override
             public void onRefresh() {
                 refreshLayout.setRefreshing(false);
-                Log.d(TAG, "onRefresh: "+datas.size());
+                homeAdapter.setArticles(datas);
                 homeAdapter.notifyDataSetChanged();
             }
         });
         recyclerView.setItemAnimator(null);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         homeAdapter = new HomeAdapter(getActivity(), datas);
         recyclerView.setAdapter(homeAdapter);
 
-        Observable<BaseResponse<ArticleList>> observable1 = DataManager.getInstance().getArticleList(1);
+        Observable<BaseResponse<ArticleList>> observable1 = DataManager.getInstance().getArticleList(0);
         observable1.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                 .subscribe(new Observer<BaseResponse<ArticleList>>() {
                     @Override
@@ -88,11 +90,10 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void onNext(BaseResponse<ArticleList> baseResponse) {
-                        Log.d(TAG, "onNext: "+Thread.currentThread().getName());
+                        Log.d(TAG, "onNext: " + Thread.currentThread().getName());
                         ArticleList articleList = baseResponse.getData();
                         datas = articleList.getDatas();
-                        Log.d(TAG, "onNext: " + datas.get(0).toString());
-                        handler.sendEmptyMessage(0);
+
                     }
 
                     @Override
@@ -102,7 +103,8 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void onComplete() {
-
+                        homeAdapter.setArticles(datas);
+                        homeAdapter.notifyDataSetChanged();
                     }
                 });
 

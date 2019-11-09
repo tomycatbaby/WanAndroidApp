@@ -3,6 +3,7 @@ package com.lzf.wanandroidapp.ui.home;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,26 +27,43 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         this.articles = list;
     }
 
+    public void setArticles(List<Article> list) {
+        this.articles = list;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_home_list, viewGroup, false);
-        Log.d("lzf", "onCreateViewHolder: ");
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Article article = articles.get(position);
-        Log.d("lzf", "onBindViewHolder: "+article.getEnvelopePic());
-        holder.tag.setText(article.getAuthor());
+        Log.d("lzf", "onBindViewHolder: " + article.getEnvelopePic());
+        if (article.isFresh()){
+            holder.fresh.setVisibility(View.VISIBLE);
+        }
+        if ("1".equals(article.getTop())){
+            holder.fresh.setVisibility(View.VISIBLE);
+        }
+        if (article.getTags().size()>0){
+            holder.tag.setVisibility(View.VISIBLE);
+            holder.tag.setText(article.getTags().get(0).getName());
+        }
         holder.title.setText(article.getTitle());
         holder.date.setText(article.getNiceDate());
         holder.chapterName.setText(article.getChapterName());
         holder.author.setText(article.getAuthor());
-        Glide.with(mContext)
-                .load(article.getEnvelopePic())
-                .into(holder.thumbnail);
+        if (!TextUtils.isEmpty(article.getEnvelopePic())) {
+            Glide.with(mContext)
+                    .load(article.getEnvelopePic())
+                    .into(holder.thumbnail);
+        }else {
+            holder.thumbnail.setVisibility(View.GONE);
+        }
+
     }
 
 
@@ -56,6 +74,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tag;
+        TextView top;
+        TextView fresh;
         TextView date;
         TextView author;
         ImageView thumbnail;
@@ -66,6 +86,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
             tag = itemView.findViewById(R.id.tv_article_tag);
+            top = itemView.findViewById(R.id.tv_article_top);
+            fresh = itemView.findViewById(R.id.tv_article_fresh);
             date = itemView.findViewById(R.id.tv_article_date);
             author = itemView.findViewById(R.id.tv_article_author);
             thumbnail = itemView.findViewById(R.id.iv_article_thumbnail);
