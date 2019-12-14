@@ -1,6 +1,7 @@
 package com.lzf.wanandroidapp.ui.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,7 +14,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lzf.wanandroidapp.R;
+import com.lzf.wanandroidapp.base.Constant;
 import com.lzf.wanandroidapp.entity.Article;
+import com.lzf.wanandroidapp.ui.ContentActivity;
 
 import java.util.List;
 
@@ -40,7 +43,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Article article = articles.get(position);
+        final Article article = articles.get(position);
         Log.d("lzf", "onBindViewHolder: " + article.getEnvelopePic());
         if (article.isFresh()){
             holder.fresh.setVisibility(View.VISIBLE);
@@ -63,7 +66,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         }else {
             holder.thumbnail.setVisibility(View.GONE);
         }
-
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ContentActivity.class);
+                intent.putExtra(Constant.CONTENT_URL_KEY,article.getLink());
+                intent.putExtra(Constant.CONTENT_TITLE_KEY,article.getTitle());
+                intent.putExtra(Constant.CONTENT_ID_KEY,article.getId());
+                mContext.startActivity(intent);
+            }
+        });
     }
 
 
@@ -82,9 +94,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         TextView title;
         TextView chapterName;
         ImageView like;
+        View view;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
             tag = itemView.findViewById(R.id.tv_article_tag);
             top = itemView.findViewById(R.id.tv_article_top);
             fresh = itemView.findViewById(R.id.tv_article_fresh);

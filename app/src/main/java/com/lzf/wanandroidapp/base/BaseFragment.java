@@ -1,11 +1,14 @@
 package com.lzf.wanandroidapp.base;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-public abstract class BaseActivity extends AppCompatActivity {
-
+public abstract class BaseFragment extends Fragment {
     /**
      * 初始化控件
      */
@@ -23,10 +26,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initView();
         initVariables();
+        initView();
         loaderData();
     }
 }
