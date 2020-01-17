@@ -169,5 +169,6 @@
     <string name="switch_label">切换</string>
     <string name="priority_0">一般</string>
     <string name="priority_1">重要</string>
+    <string name="title_activity_basic">BasicActivity</string>
 
 </resources>

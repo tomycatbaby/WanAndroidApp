@@ -1,6 +1,7 @@
 package com.lzf.wanandroidapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
@@ -9,6 +10,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -26,6 +28,7 @@ import android.view.Menu;
 import android.widget.Toast;
 
 import com.lzf.wanandroidapp.base.BaseActivity;
+import com.lzf.wanandroidapp.ui.BasicActivity;
 
 import java.io.File;
 import java.io.FileReader;
@@ -79,6 +82,18 @@ public class MainActivity extends BaseActivity {
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.nav_score:
+                        Intent intent = new Intent(MainActivity.this, BasicActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+                return false;
+            }
+        });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);

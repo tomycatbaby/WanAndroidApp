@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:drawable="@drawable/ic7_spinner1"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/ic7_spinner2"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/ic7_spinner3"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/ic7_spinner4"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/ic7_spinner5"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/ic7_spinner6"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/ic7_spinner7"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/ic7_spinner8"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/ic7_spinner9"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/ic7_spinner10"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/ic7_spinner11"
+        android:duration="100" />
+    <item
+        android:drawable="@drawable/ic7_spinner12"
+        android:duration="100" />
+
+</animation-list>

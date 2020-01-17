@@ -34,6 +34,7 @@ import com.lzf.wanandroidapp.entity.ArticleList;
 import com.lzf.wanandroidapp.entity.Banner;
 import com.lzf.wanandroidapp.mvp.contract.HomeContact;
 import com.lzf.wanandroidapp.mvp.presenter.HomePresenter;
+import com.lzf.wanandroidapp.widget.RefreshLayout;
 
 import org.reactivestreams.Subscriber;
 
@@ -54,9 +55,9 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
     private HomePresenter mHomePresenter;
     HomeAdapter homeAdapter;
     private View BannerView;
-    private SwipeRefreshLayout refreshLayout;
+    private RefreshLayout refreshLayout;
     private RecyclerView recyclerView;
-    private ProgressBar progressBar;
+
 
     @Override
     public void initView() {
@@ -83,16 +84,15 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = root.findViewById(R.id.recyclerView);
         refreshLayout = root.findViewById(R.id.swipeRefreshLayout);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refreshLayout.init();
+        handler = new MyHandler();
+        refreshLayout.setOnRefresh(new RefreshLayout.CallBack() {
             @Override
             public void onRefresh() {
-                refreshLayout.setRefreshing(false);
-                homeAdapter.setArticles(datas);
-                homeAdapter.notifyDataSetChanged();
+                Log.d(TAG, "onRefresh: ");
+                handler.sendEmptyMessageDelayed(1,5000);
             }
         });
-        progressBar= root.findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
         recyclerView.setItemAnimator(null);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -101,6 +101,11 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
         recyclerView.setAdapter(homeAdapter);
         mHomePresenter.requestArticle(1);
         return root;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
     }
 
     @Override
@@ -117,9 +122,20 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
     public void setArticles(List<Article> articles) {
         Log.d(TAG, "setArticles: ");
         recyclerView.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.GONE);
         datas = articles;
         homeAdapter.setArticles(datas);
         homeAdapter.notifyDataSetChanged();
+    }
+    private MyHandler handler;
+    private class MyHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 1:
+                    Log.d(TAG, "stop: ");
+                    refreshLayout.stop();
+                    break;
+            }
+        }
     }
 }

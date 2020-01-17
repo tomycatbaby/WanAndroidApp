@@ -44,7 +44,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Article article = articles.get(position);
-        Log.d("lzf", "onBindViewHolder: " + article.getEnvelopePic());
         if (article.isFresh()){
             holder.fresh.setVisibility(View.VISIBLE);
         }
