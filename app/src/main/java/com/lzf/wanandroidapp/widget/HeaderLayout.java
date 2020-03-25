@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +25,7 @@ public class HeaderLayout extends FrameLayout {
     private Context mContext;
     private ImageView headImageView;
     private View mVHeaderContent;
+    private View mVHeader;
     private int mHeaderHeight;
     private ValueAnimator mHeightAnim;
     private int mStatus = -1;
@@ -43,6 +45,7 @@ public class HeaderLayout extends FrameLayout {
     public void initView() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.header_view, this, false);
         addView(view);
+        mVHeader = view.findViewById(R.id.root);
         mVHeaderContent = view.findViewById(R.id.header_rl_content);
         headImageView = view.findViewById(R.id.dapter_empty_animator);
         headImageView.setImageResource(R.drawable.empty_animator);
@@ -51,7 +54,8 @@ public class HeaderLayout extends FrameLayout {
         animation.start();
     }
 
-    public int getHeaderHeight() {
+    public int getHeaderContentHeight() {
+        Log.d("trq", "getHeaderHeight: "+mVHeaderContent.getMeasuredHeight());
         return mVHeaderContent.getMeasuredHeight();
     }
 
@@ -61,31 +65,35 @@ public class HeaderLayout extends FrameLayout {
     }
 
     public void onBackRefreshStatus() {
-        setHeightAnim(getHeaderHeight());
+        setHeaderHeight(getHeaderContentHeight());
     }
 
     private void setHeightAnim(final int toHeight) {
-        mHeightAnim = ValueAnimator.ofInt(getHeaderHeight(), toHeight);
-        mHeightAnim.setDuration(1000);
+
+        //属性动画
+        mHeightAnim = ValueAnimator.ofInt(getHeaderContentHeight(), toHeight);
+        mHeightAnim.setDuration(500);
         mHeightAnim.setInterpolator(new AccelerateDecelerateInterpolator());
         mHeightAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 final Integer animValue = (Integer) valueAnimator.getAnimatedValue();
+                Log.d("lzf", "onAnimationUpdate: "+animValue);
                 setHeaderHeight(animValue);
             }
         });
         mHeightAnim.start();
     }
 
+
+
     public void setHeaderHeight(int height) {
         if (height < 0) {
             height = 0;
         }
         mHeaderHeight = height;
-        LayoutParams params = (LayoutParams) getLayoutParams();
-        params.height = mHeaderHeight;
-        headImageView.setLayoutParams(params);
+        mVHeader.getLayoutParams().height = mHeaderHeight;
+        mVHeader.requestLayout();
     }
 
     public void setStatus(int status) {
@@ -107,14 +115,14 @@ public class HeaderLayout extends FrameLayout {
                 //onCanRefreshStatus();
                 break;
             case Status.REFRESH:
-                //onRefreshStatus();
+                onBackRefreshStatus();
                 break;
             //below will reset mStatus value
             case Status.BACK_NORMAL:
                 onBackNormalStatus();
                 break;
             case Status.BACK_REFRESH:
-                onBackRefreshStatus();
+                //onBackRefreshStatus();
                 break;
             case Status.AUTO_REFRESH:
                 //onAutoRefreshStatus();
@@ -122,6 +130,9 @@ public class HeaderLayout extends FrameLayout {
             default:
                 break;
         }
+    }
+
+    private void onRefreshStatus() {
     }
 
     public static class Status {
@@ -141,26 +152,4 @@ public class HeaderLayout extends FrameLayout {
         public static final int AUTO_REFRESH = 6;
     }
 
-    @Override
-    protected LayoutParams generateLayoutParams(ViewGroup.LayoutParams lp) {
-        return new LayoutParams(lp);
-    }
-
-    public static class LayoutParams extends FrameLayout.MarginLayoutParams {
-        public LayoutParams(Context c, AttributeSet attrs) {
-            super(c, attrs);
-        }
-
-        public LayoutParams(MarginLayoutParams source) {
-            super(source);
-        }
-
-        public LayoutParams(ViewGroup.LayoutParams source) {
-            super(source);
-        }
-
-        public LayoutParams(int width, int height) {
-            super(width, height);
-        }
-    }
 }

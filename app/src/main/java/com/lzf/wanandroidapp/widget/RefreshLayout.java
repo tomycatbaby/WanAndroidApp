@@ -62,6 +62,7 @@ public class RefreshLayout extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int childCount = getChildCount();
+        Log.d(TAG, "onLayout: "+childCount);
         View vHeader = null;
         View vContent = null;
         for (int i = 0; i < childCount; i++) {
@@ -159,6 +160,7 @@ public class RefreshLayout extends ViewGroup {
                 if (mYDistance == 0f) {
                     break;
                 }
+                fresh();
 //                if (isHeaderActive()) {
 //                    mYDistance *= externForce(mHeaderLayout.getHeaderHeight(),
 //                            mHeaderLayout.getHeaderContentHeight());
@@ -195,7 +197,6 @@ public class RefreshLayout extends ViewGroup {
         mHeaderLayout = new HeaderLayout(getContext());
         mHeaderLayout.setHeaderHeight(0);
         addView(mHeaderLayout, 0);//header should be the first view
-        mHeaderLayout.onBackNormalStatus();
     }
 
     private boolean isPullDown(int action, float fDisYPos) {
@@ -221,6 +222,10 @@ public class RefreshLayout extends ViewGroup {
 
     public void stop() {
         mHeaderLayout.setStatus(HeaderLayout.Status.BACK_NORMAL);
+    }
+
+    public void fresh() {
+        mHeaderLayout.setStatus(HeaderLayout.Status.REFRESH);
     }
 
     public boolean isContentToTop() {

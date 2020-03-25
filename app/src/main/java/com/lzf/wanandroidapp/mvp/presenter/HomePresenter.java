@@ -62,6 +62,7 @@ public class HomePresenter implements HomeContact.Presenter {
 
                     @Override
                     public void onComplete() {
+
                     }
                 });
     }

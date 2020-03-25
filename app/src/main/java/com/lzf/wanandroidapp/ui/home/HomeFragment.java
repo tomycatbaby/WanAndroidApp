@@ -69,6 +69,10 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
 
     }
 
+    public void toTop(){
+        recyclerView.smoothScrollToPosition(0);
+    }
+
     @Override
     public void initVariables() {
         mHomePresenter = new HomePresenter(this);
@@ -90,7 +94,7 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
             @Override
             public void onRefresh() {
                 Log.d(TAG, "onRefresh: ");
-                handler.sendEmptyMessageDelayed(1,5000);
+                handler.sendEmptyMessageDelayed(1,2000);
             }
         });
         recyclerView.setItemAnimator(null);
@@ -99,6 +103,7 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
         recyclerView.setLayoutManager(linearLayoutManager);
         homeAdapter = new HomeAdapter(getActivity(), datas);
         recyclerView.setAdapter(homeAdapter);
+        recyclerView.setHasFixedSize(true);
         mHomePresenter.requestArticle(1);
         return root;
     }

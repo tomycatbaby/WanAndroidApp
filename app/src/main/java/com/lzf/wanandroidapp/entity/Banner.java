@@ -1,9 +1,12 @@
 package com.lzf.wanandroidapp.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * 轮播图
  */
-public class Banner {
+public class Banner implements Parcelable {
     String desc;
     int id;
     String imagePath;
@@ -12,6 +15,31 @@ public class Banner {
     String title;
     int type;
     String url;
+
+    //反序列化
+    protected Banner(Parcel in) {
+        desc = in.readString();
+        id = in.readInt();
+        imagePath = in.readString();
+        isVisible = in.readString();
+        order = in.readInt();
+        title = in.readString();
+        type = in.readInt();
+        url = in.readString();
+    }
+
+    //
+    public static final Creator<Banner> CREATOR = new Creator<Banner>() {
+        @Override
+        public Banner createFromParcel(Parcel in) {
+            return new Banner(in);
+        }
+
+        @Override
+        public Banner[] newArray(int size) {
+            return new Banner[size];
+        }
+    };
 
     @Override
     public String toString() {
@@ -90,4 +118,24 @@ public class Banner {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    //序列化的过程叫writeToParcel
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(desc);
+        dest.writeInt(id);
+        dest.writeString(imagePath);
+        dest.writeString(isVisible);
+        dest.writeInt(order);
+        dest.writeString(title);
+        dest.writeInt(type);
+        dest.writeString(url);
+    }
+
 }

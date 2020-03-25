@@ -6,15 +6,22 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+
     <TextView
-        android:id="@+id/btn_empty"
+        android:id="@+id/tv_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:text="@string/no_data"
+        android:text="测试"
         android:textColor="@color/cardview_dark_background"
-        android:textSize="15sp"/>
+        android:drawableStart="@drawable/empty_animator"
+        android:drawableEnd="@drawable/empty_animator"
+        android:textSize="20sp"/>
+
+
+<!--    <ImageView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/empty_animator"-->
+<!--        />-->
 </LinearLayout>

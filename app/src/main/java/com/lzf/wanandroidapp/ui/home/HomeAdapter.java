@@ -68,7 +68,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, ContentActivity.class);
+                Intent intent = new Intent(
+                        mContext, ContentActivity.class);
                 intent.putExtra(Constant.CONTENT_URL_KEY,article.getLink());
                 intent.putExtra(Constant.CONTENT_TITLE_KEY,article.getTitle());
                 intent.putExtra(Constant.CONTENT_ID_KEY,article.getId());
