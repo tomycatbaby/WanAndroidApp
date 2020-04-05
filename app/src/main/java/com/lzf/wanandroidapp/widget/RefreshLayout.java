@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ScrollView;
@@ -302,5 +303,10 @@ public class RefreshLayout extends ViewGroup {
             default:
                 break;
         }
+    }
+
+    public boolean istouchSlop() {
+        int x = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+        return mCanRefresh;
     }
 }

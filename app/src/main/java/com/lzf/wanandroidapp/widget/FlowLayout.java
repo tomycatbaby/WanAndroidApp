@@ -2,11 +2,15 @@ package com.lzf.wanandroidapp.widget;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.telephony.CellInfo;
+import android.telephony.CellInfoGsm;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FlowLayout extends ViewGroup {
@@ -68,10 +72,21 @@ public class FlowLayout extends ViewGroup {
             int measuredWidth = child.getMeasuredWidth();
             int measuredHeight = child.getMeasuredHeight();
             //获取元素的margin
-            marginParams = (MarginLayoutParams) child.getLayoutParams();
-            //子元素所占宽度 = MarginLeft+ child.getMeasuredWidth+MarginRight  注意此时不能child.getWidth,因为界面没有绘制完成，此时wdith为0
-            int childWidth = marginParams.leftMargin + marginParams.rightMargin + measuredWidth;
-            int childHeight = marginParams.topMargin + marginParams.bottomMargin + measuredHeight;
+            int childWidth, childHeight;
+            int right = 0, left = 0, top = 0, bottom = 0;
+            childWidth = measuredWidth;
+            childHeight = measuredHeight;
+            if (child.getLayoutParams() != null) {
+                marginParams = (LayoutParams) child.getLayoutParams();
+                //子元素所占宽度 = MarginLeft+ child.getMeasuredWidth+MarginRight  注意此时不能child.getWidth,因为界面没有绘制完成，此时wdith为0
+                childWidth += marginParams.leftMargin + marginParams.rightMargin;
+                childHeight += marginParams.topMargin + marginParams.bottomMargin;
+                right = marginParams.rightMargin;
+                left = marginParams.leftMargin;
+                top = marginParams.topMargin;
+                bottom = marginParams.bottomMargin;
+            }
+
             //判断是否换行： 该行已占大小+该元素大小>父容器宽度  则换行
 
             rowsMaxHeight = Math.max(rowsMaxHeight, childHeight);
@@ -88,7 +103,7 @@ public class FlowLayout extends ViewGroup {
             //累加上该行子元素宽度
             rowsWidth += childWidth;
             //判断时占的宽段时加上margin计算，设置顶点位置时不包括margin位置，不然margin会不起作用，这是给View设置tag,在onlayout给子元素设置位置再遍历取出
-            child.setTag(new Rect(rowsWidth - childWidth + marginParams.leftMargin, columnHeight + marginParams.topMargin, rowsWidth - marginParams.rightMargin, columnHeight + childHeight - marginParams.bottomMargin));
+            child.setTag(new Rect(rowsWidth - childWidth + left, columnHeight + top, rowsWidth - right, columnHeight + childHeight - bottom));
         }
 
         //返回子元素总所占宽度和高度（用于计算Flowlayout的AT_MOST模式设置宽高）
@@ -114,14 +129,10 @@ public class FlowLayout extends ViewGroup {
         }
     }
 
-    public LayoutParams generateLayoutParams(AttributeSet attrs) {
-        return new LayoutParams(getContext(), attrs);
-    }
-
     //需要重写这个方法，否则无法使用MarginLayoutParams
     @Override
-    protected ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams lp) {
-        return new LayoutParams(lp);
+    public ViewGroup.LayoutParams generateLayoutParams(AttributeSet attrs) {
+        return new LayoutParams(getContext(), attrs);
     }
 
     @Override

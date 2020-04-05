@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
-import com.lzf.wanandroidapp.MainActivity;
 import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.base.BaseActivity;
 

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.lzf.wanandroidapp.widget.FlowLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.BasicActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -20,40 +22,52 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <TextView
+    <com.lzf.wanandroidapp.widget.FlowLayout
+        android:id="@+id/flowLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/java"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_marginEnd="@dimen/dp_6"
+            android:background="@drawable/text_back"
+            android:padding="@dimen/dp_3"
+            android:text="Java" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_marginEnd="@dimen/dp_6"
+            android:background="@drawable/text_back"
+            android:padding="@dimen/dp_3"
+            android:text="Android" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_marginEnd="@dimen/dp_6"
+            android:background="@drawable/text_back"
+            android:padding="@dimen/dp_3"
+            android:text="Php" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_marginEnd="@dimen/dp_6"
+            android:background="@drawable/text_back"
+            android:padding="@dimen/dp_3"
+            android:text="C++" />
+    </com.lzf.wanandroidapp.widget.FlowLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dp_6"
-        android:padding="@dimen/dp_3"
-        android:layout_marginTop="@dimen/dp_3"
-        android:background="@drawable/text_back"
-        android:text="Java" />
+        android:layout_gravity="right"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dp_6"
-        android:layout_marginTop="@dimen/dp_3"
-        android:padding="@dimen/dp_3"
-        android:background="@drawable/text_back"
-        android:text="Android" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dp_6"
-        android:layout_marginTop="@dimen/dp_3"
-        android:padding="@dimen/dp_3"
-        android:background="@drawable/text_back"
-        android:text="Php" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dp_6"
-        android:layout_marginTop="@dimen/dp_3"
-        android:padding="@dimen/dp_3"
-        android:background="@drawable/text_back"
-        android:text="C++" />
-
-</com.lzf.wanandroidapp.widget.FlowLayout>
+</LinearLayout>

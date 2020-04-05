@@ -1,27 +1,21 @@
-package com.lzf.wanandroidapp;
+package com.lzf.wanandroidapp.ui;
 
-import android.annotation.SuppressLint;
-import android.app.DownloadManager;
-import android.content.Context;
+import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.util.DiffUtil;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +26,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -45,24 +38,19 @@ import io.reactivex.subjects.PublishSubject;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.widget.Toast;
+import android.widget.ImageView;
 
-import com.google.gson.Gson;
+import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.base.BaseActivity;
-import com.lzf.wanandroidapp.ui.BasicActivity;
-import com.lzf.wanandroidapp.ui.H5Activity;
-import com.lzf.wanandroidapp.ui.home.HomeFragment;
+import com.lzf.wanandroidapp.utils.CalendarReminderUtil;
+import com.lzf.wanandroidapp.utils.WanExecutor;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Objects;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class MainActivity extends BaseActivity {
 
@@ -113,13 +101,22 @@ public class MainActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, H5Activity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, H5Activity.class);
+//                startActivity(intent);
+
+                Log.d("lzf", "onClick: ");
+                //testThread();
             }
         });
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.getHeaderView(0).findViewById(R.id.iv_rank).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, RankActivity.class);
+                startActivity(i);
+            }
+        });
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -175,7 +172,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    void Test() {
+    void test() {
         final PublishSubject<Integer> mCityPublish = PublishSubject.create();
         //订阅者，去订阅消息，distinctUntilChanged可以对结果进行过滤，如果重复则不会通知订阅者
         final Observable<Integer> observable = mCityPublish.distinctUntilChanged().doOnNext(new Consumer<Integer>() {
@@ -187,7 +184,9 @@ public class MainActivity extends BaseActivity {
         //observable
         Flowable<String> flowable = Flowable.just("");
         observable.subscribe();//观察者开始观察
-
+        ArrayList<String> l;
+        ;
+        Objects.equals("", "");
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -214,11 +213,11 @@ public class MainActivity extends BaseActivity {
                 }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Object>() {
-            @Override
-            public void accept(Object o) throws Exception {
+                    @Override
+                    public void accept(Object o) throws Exception {
 
-            }
-        });
+                    }
+                });
         Observer<Integer> observer = new Observer<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -241,6 +240,97 @@ public class MainActivity extends BaseActivity {
             }
         };
 
+    }
+
+    void testCalendar() {
+        long time = Calendar.getInstance().getTimeInMillis() + 120000;
+        CalendarReminderUtil.addCalendarEvent(getApplicationContext(), "高铁行程", "深圳到广州", time, 1);
+    }
+
+    void testStartActivity() {
+        //启动其他应用的activity
+        //隐式启动,同一应用可以存在相同的action，会提示用户打开哪个activity,文件清单中必须要category，否则报错
+//                Intent intent = new Intent("det");
+//                startActivity(intent);
+        //用intent设置className或component的办法启动
+//                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                intent.setClassName("com.example.mybook","com.example.mybook.DetailActivity");
+//                //component方法
+//                //intent.setComponent(new ComponentName("com.example.mybook","com.example.mybook.DetailActivity"));
+//                startActivity(intent);
+    }
+
+    void testNotification() {
+        //在Android 8.0 也就是API26以上的通知适配，升级项目的targetSdkVersion到26，也就是Android 8.0开始你会发现曾经的通知代码会进行废弃方法提示
+        //那好我们必须的学习下通知渠道的适配了
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelId = "subscribe";
+            String channelName = "订阅消息";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            createNotificationChannel(channelId, channelName, importance);
+        }
+
+        showNotification();
+    }
+
+    void testThread() {
+        final String a = "";
+        final String b = "";
+        //wait的意思是持有synchronized 锁的线程去等待，然后释放锁
+        //notify前提也是当前持有一个锁，如果想要释放这个synchronized 锁就可以调用这个
+        final ReentrantLock reentrantLock = new ReentrantLock(true);//公平锁，谁申请时间长分配给谁
+        WanExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 20; i++) {
+                    reentrantLock.lock();
+                    Log.d("lzf", "A线程: " + i);
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    reentrantLock.unlock();
+                }
+            }
+        });
+        WanExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 20; i++) {
+                    reentrantLock.lock();
+                    Log.d("lzf", "B线程: " + i);
+                    reentrantLock.unlock();
+
+                }
+            }
+        });
+    }
+
+    private void showNotification() {
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Notification notification = new NotificationCompat.Builder(this, "subscribe")
+                .setContentTitle("收到一条订阅消息")
+                .setContentText("地铁沿线30万商铺抢购中！")
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round))
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(true)
+                .build();
+        manager.notify(1, notification);
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.O)
+    private void createNotificationChannel(String channelId, String channelName, int importance) {
+        NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
+        channel.setShowBadge(true);
+        channel.enableLights(true);//呼吸灯
+        //channel.enableVibration(true);
+        //channel.setSound();
+        NotificationManager notificationManager = (NotificationManager) getSystemService(
+                NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannel(channel);
     }
 
     /**
