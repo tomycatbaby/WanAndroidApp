@@ -29,10 +29,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.jetpack.StartActivity"></activity>
         <activity
             android:name=".ui.RankActivity"
             android:label="@string/title_activity_rank"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.H5Activity">
             <intent-filter>
                 <action android:name="det" />

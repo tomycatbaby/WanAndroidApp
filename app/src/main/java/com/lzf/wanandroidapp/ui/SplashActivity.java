@@ -2,7 +2,7 @@ package com.lzf.wanandroidapp.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -19,6 +19,7 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
         view = findViewById(R.id.layout_splash);
 
+        //补间动画
         alphaAnimation = new AlphaAnimation(0.3F, 1.0F);
         alphaAnimation.setDuration(2000);
         alphaAnimation.setAnimationListener(new Animation.AnimationListener() {
@@ -61,5 +62,30 @@ public class SplashActivity extends BaseActivity {
         finish();
         //?
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showDefaultMsg(String msg) {
+
+    }
+
+    @Override
+    public void showMsg(String msg) {
+
+    }
+
+    @Override
+    public void showError(String errorMsg) {
+
     }
 }

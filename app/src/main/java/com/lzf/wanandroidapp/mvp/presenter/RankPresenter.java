@@ -25,7 +25,9 @@ public class RankPresenter implements RankContact.Presenter {
     @Override
     public void getRankList(int page) {
         Observable<BaseResponse<BaseListResponseBody<Rank>>> observable = model.getRankList(page);
-        observable.observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).subscribe(new Observer<BaseResponse<BaseListResponseBody<Rank>>>() {
+        observable.observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<BaseResponse<BaseListResponseBody<Rank>>>() {
             @Override
             public void onSubscribe(Disposable d) {
 
@@ -35,12 +37,12 @@ public class RankPresenter implements RankContact.Presenter {
             public void onNext(BaseResponse<BaseListResponseBody<Rank>> baseListResponseBodyBaseResponse) {
                 BaseListResponseBody<Rank> responseBody = baseListResponseBodyBaseResponse.getData();
                 rankView.showRankList(responseBody.getDatas());
-                Log.d("lzf", "onNext: " + responseBody.getDatas().toString());
+
             }
 
             @Override
             public void onError(Throwable e) {
-
+                rankView.showError("");
             }
 
             @Override

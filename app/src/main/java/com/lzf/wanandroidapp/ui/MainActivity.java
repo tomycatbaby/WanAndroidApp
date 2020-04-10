@@ -9,13 +9,14 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.fragment.app.Fragment;
+import androidx.core.app.NotificationCompat;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,15 +36,15 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
+import com.google.android.material.navigation.NavigationView;
+import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
-import android.widget.ImageView;
 
 import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.base.BaseActivity;
+import com.lzf.wanandroidapp.base.SettingUtil;
 import com.lzf.wanandroidapp.utils.CalendarReminderUtil;
 import com.lzf.wanandroidapp.utils.WanExecutor;
 
@@ -124,6 +125,17 @@ public class MainActivity extends BaseActivity {
                     case R.id.nav_score:
                         Intent intent = new Intent(MainActivity.this, BasicActivity.class);
                         startActivity(intent);
+                        break;
+                    case R.id.nav_night_mode:
+                        if (SettingUtil.getIsNightMode()){
+                            SettingUtil.setNightMode(false);
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                        }else {
+                            SettingUtil.setNightMode(true);
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                        }
+                        getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
+                        recreate();
                         break;
                 }
                 return false;
@@ -356,6 +368,31 @@ public class MainActivity extends BaseActivity {
                 toolbar.setTitle(getString(R.string.wechat));
                 break;
         }
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showDefaultMsg(String msg) {
+
+    }
+
+    @Override
+    public void showMsg(String msg) {
+
+    }
+
+    @Override
+    public void showError(String errorMsg) {
+
     }
 //
 //    给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。

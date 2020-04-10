@@ -1,6 +1,8 @@
 package com.lzf.wanandroidapp.entity;
 
-public class Rank {
+import java.util.Comparator;
+
+public class Rank implements Comparable<Rank> {
 
     private int coinCount;
     private int rank;
@@ -47,5 +49,10 @@ public class Rank {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public int compareTo(Rank o) {
+        return username.compareToIgnoreCase(o.getUsername());
     }
 }
