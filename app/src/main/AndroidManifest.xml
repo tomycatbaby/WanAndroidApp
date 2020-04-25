@@ -29,7 +29,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.jetpack.StartActivity"></activity>
+        <activity android:name=".ui.activity.CollectActivity"></activity>
+        <activity android:name=".ui.jetpack.StartActivity" />
         <activity
             android:name=".ui.RankActivity"
             android:label="@string/title_activity_rank"

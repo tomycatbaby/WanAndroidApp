@@ -45,6 +45,7 @@ import android.view.Menu;
 import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.base.BaseActivity;
 import com.lzf.wanandroidapp.base.SettingUtil;
+import com.lzf.wanandroidapp.ui.activity.CollectActivity;
 import com.lzf.wanandroidapp.utils.CalendarReminderUtil;
 import com.lzf.wanandroidapp.utils.WanExecutor;
 
@@ -136,6 +137,10 @@ public class MainActivity extends BaseActivity {
                         }
                         getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
                         recreate();
+                        break;
+                    case R.id.nav_collect:
+                        Intent i = new Intent(MainActivity.this, CollectActivity.class);
+                        startActivity(i);
                         break;
                 }
                 return false;
