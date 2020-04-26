@@ -28,6 +28,10 @@ public class ContentActivity extends BaseActivity {
         String id = intent.getStringExtra(Constant.CONTENT_ID_KEY);
         String title = intent.getStringExtra(Constant.CONTENT_TITLE_KEY);
         webView.loadUrl(url);
+        BasicActivity basicActivity =  new BasicActivity();
+        basicActivity.new Entry();
+        basicActivity.getEntry().gr();//
+        Bundle bundle;
     }
 
     @Override
