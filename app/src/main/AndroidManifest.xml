@@ -27,10 +27,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <service
             android:name=".service.WanService"
             android:enabled="true"
             android:exported="true"/>
+
+        <activity android:name=".ui.activity.CollectActivity"/>
 
         <activity android:name=".ui.jetpack.StartActivity" />
         <activity
