@@ -47,7 +47,6 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
         final Collect collect = collects.get(i);
-        Log.d("lzf", "onBindViewHolder: " + collect.toString());
         holder.title.setText(collect.getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

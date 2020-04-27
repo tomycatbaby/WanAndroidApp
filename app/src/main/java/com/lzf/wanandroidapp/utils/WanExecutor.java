@@ -17,6 +17,7 @@ public class WanExecutor {
     private static final int KEEP_ALIVE_SECONDS = 30;
     private static final BlockingQueue<Runnable> sPoolWorkQueue =
             new LinkedBlockingQueue<Runnable>(128);
+    //核心线程数满了就提交到请求队列排队，请求队列满了但是最大线程数没有满就创建新线程，最大线程数也达到了最大数，就执行满额策略
     private static final Executor sDefaultExecutor = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, KEEP_ALIVE_SECONDS, TimeUnit.SECONDS, sPoolWorkQueue);
 
     public static void execute(Runnable runnable) {

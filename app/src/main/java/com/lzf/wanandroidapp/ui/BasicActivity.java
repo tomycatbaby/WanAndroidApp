@@ -29,6 +29,7 @@ import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.internal.cache.CacheInterceptor;
 
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.MemoryFile;
@@ -53,6 +54,7 @@ import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.http.RetrofitHelper;
 import com.lzf.wanandroidapp.service.WanJobService;
 import com.lzf.wanandroidapp.service.WanService;
+import com.lzf.wanandroidapp.ui.activity.CollectActivity;
 import com.lzf.wanandroidapp.widget.FlowLayout;
 import com.lzf.wanandroidapp.worker.WanWorker;
 
@@ -76,6 +78,7 @@ public class BasicActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         Log.d(TAG, "onResume: ");
     }
 
@@ -123,9 +126,7 @@ public class BasicActivity extends AppCompatActivity {
         setContentView(R.layout.activity_basic);
         Toolbar toolbar = findViewById(R.id.toolbar);
         final FlowLayout flowLayout = findViewById(R.id.flowLayout);
-        viewStub = findViewById(R.id.viewStub);
-        v1 = findViewById(R.id.image1);
-        v2 = findViewById(R.id.image2);
+
 
         final TextView t = findViewById(R.id.java);
         FloatingActionButton floatingActionButton = findViewById(R.id.fButton);
@@ -139,7 +140,6 @@ public class BasicActivity extends AppCompatActivity {
 //                DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
 //                int screenWidth = dm.widthPixels;
 //                int screenHeight = dm.heightPixels;
-
 
 
             }
@@ -250,7 +250,6 @@ public class BasicActivity extends AppCompatActivity {
         String s;
 
         public String gr() {
-            onDestroy();
             return s;
         }
     }

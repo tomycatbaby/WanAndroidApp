@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:background="@color/colorAccent"
     tools:context=".ui.BasicActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -70,19 +71,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"/>
-    <ImageView
-        android:id="@+id/image1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/logo"/>
-    <ImageView
-        android:id="@+id/image2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/logo"/>
-    <ViewStub
-        android:id="@+id/viewStub"
-        android:layout="@layout/empty_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+
+
 </LinearLayout>

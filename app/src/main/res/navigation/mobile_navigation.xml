@@ -14,10 +14,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.lzf.wanandroidapp.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_knowledge_system"
+        android:name="com.lzf.wanandroidapp.ui.knowledge.KnowledgeFragment"
+        android:label="@string/knowledge_system"
+        tools:layout="@layout/fragment_knowledge" />
 
     <fragment
         android:id="@+id/nav_slideshow"

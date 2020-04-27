@@ -1,14 +1,13 @@
-package com.lzf.wanandroidapp.ui.gallery;
+package com.lzf.wanandroidapp.ui.wechat;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
-
+public class WeChatViewModel extends ViewModel {
     private MutableLiveData<String> mText;
 
-    public GalleryViewModel() {
+    public WeChatViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is gallery fragment");
     }

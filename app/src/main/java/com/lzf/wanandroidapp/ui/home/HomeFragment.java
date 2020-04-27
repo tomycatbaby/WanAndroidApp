@@ -24,6 +24,8 @@ import com.lzf.wanandroidapp.mvp.contract.HomeContact;
 import com.lzf.wanandroidapp.mvp.presenter.HomePresenter;
 import com.lzf.wanandroidapp.widget.RefreshLayout;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +63,13 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: ");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -74,17 +83,19 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
             @Override
             public void onRefresh() {
                 Log.d(TAG, "onRefresh: ");
-                handler.sendEmptyMessageDelayed(1,2000);
+                handler.sendEmptyMessageDelayed(1,1000);
             }
         });
         recyclerView.setItemAnimator(null);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setItemViewCacheSize(20);//设置看不见的item的缓存数量，默认是2
         homeAdapter = new HomeAdapter(getActivity(), datas);
         recyclerView.setAdapter(homeAdapter);
         recyclerView.setHasFixedSize(true);
         mHomePresenter.requestArticle(1);
+        Log.d(TAG, "onCreateView: ");
         return root;
     }
 

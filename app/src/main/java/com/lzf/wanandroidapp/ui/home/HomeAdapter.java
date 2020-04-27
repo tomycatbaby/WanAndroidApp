@@ -5,6 +5,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             Glide.with(mContext)
                     .load(article.getEnvelopePic())
                     .into(holder.thumbnail);
+            holder.thumbnail.setVisibility(View.VISIBLE);
         }else {
             holder.thumbnail.setVisibility(View.GONE);
         }
