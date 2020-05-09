@@ -64,6 +64,7 @@ import com.lzf.wanandroidapp.ui.tools.ToolsFragment;
 import com.lzf.wanandroidapp.utils.CalendarReminderUtil;
 import com.lzf.wanandroidapp.utils.WanExecutor;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MainActivity extends BaseActivity {
-
+    String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
     private int FRAGMENT_HOME = 0x01;
     private int FRAGMENT_KNOWLEDGE = 0x02;
@@ -96,11 +97,43 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+        Log.d(TAG, "onCreate: ");
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
     }
 
     @Override
@@ -132,6 +165,7 @@ public class MainActivity extends BaseActivity {
         navigationView.getHeaderView(0).findViewById(R.id.iv_rank).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent i = new Intent(MainActivity.this, RankActivity.class);
                 startActivity(i);
             }
@@ -205,6 +239,7 @@ public class MainActivity extends BaseActivity {
     public void initVariables() {
 
     }
+
 
     void test() {
         final PublishSubject<Integer> mCityPublish = PublishSubject.create();
@@ -408,6 +443,7 @@ public class MainActivity extends BaseActivity {
                 break;
             case 2:
                 toolbar.setTitle(getString(R.string.knowledge_system));
+                Class s = this.getClass();
                 if (knowledgeFragment == null) {
                     knowledgeFragment = new KnowledgeFragment();
                     fragmentTransaction.add(R.id.content_main, knowledgeFragment, "knowledge");

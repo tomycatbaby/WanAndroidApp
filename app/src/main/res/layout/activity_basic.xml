@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +6,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    android:background="@color/colorAccent"
     tools:context=".ui.BasicActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -29,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.lzf.wanandroidapp.widget.SuperTextView
             android:id="@+id/java"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +37,7 @@
             android:padding="@dimen/dp_3"
             android:text="Java" />
 
-        <TextView
+        <com.lzf.wanandroidapp.widget.SuperTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_3"
@@ -48,7 +46,7 @@
             android:padding="@dimen/dp_3"
             android:text="Android" />
 
-        <TextView
+        <com.lzf.wanandroidapp.widget.SuperTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_3"
@@ -57,20 +55,24 @@
             android:padding="@dimen/dp_3"
             android:text="Php" />
 
-        <TextView
+        <com.lzf.wanandroidapp.widget.SuperTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_3"
             android:layout_marginEnd="@dimen/dp_6"
             android:background="@drawable/text_back"
             android:padding="@dimen/dp_3"
-            android:text="C++" />
+            android:text="WAN Android APP" />
     </com.lzf.wanandroidapp.widget.FlowLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"/>
-
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="爱玩"/>
 
 </LinearLayout>

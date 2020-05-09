@@ -1,5 +1,6 @@
 package com.lzf.wanandroidapp.http;
 
+import com.bumptech.glide.Glide;
 import com.lzf.wanandroidapp.base.App;
 import com.lzf.wanandroidapp.base.Constant;
 import com.lzf.wanandroidapp.http.api.GeeksApis;
@@ -48,6 +49,7 @@ public class RetrofitHelper {
     }
 
     private OkHttpClient getOkHttpClient() {
+
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

@@ -5,6 +5,8 @@ import android.graphics.Rect;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoGsm;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FlowLayout extends ViewGroup {
+    String TAG = "FlowLayout";
     public FlowLayout(Context context) {
         super(context);
     }
@@ -21,6 +24,42 @@ public class FlowLayout extends ViewGroup {
     public FlowLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
+    /*
+     * 收到事件首先传递到Activity，然后会调用到window的事件分发，从Window到顶级View，传递到ViewGroup的事件分发方法，dispatchTouchEvent，
+     * ViewGroup是有一个onInterceptTouchEvent,意思是ViewGroup是否需要拦截这个事件，如果不需要处理，会向下传递给子View
+     * 如果拦截，事件就不会传递给子View了，会调用ViewGroup的touch方法，
+     * 关于onTouchEvent方法，如果返回的是false，后续点击事件不会再传递到这个View了，如果所有的子View都是返回false的话，就会调用到Activity的onTouchEvent方法
+     *
+     *
+     * */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_CANCEL:
+                Log.d(TAG, "ACTION_CANCEL: ");
+                break;
+            case MotionEvent.ACTION_UP:
+                Log.d(TAG, "ACTION_UP: ");
+                break;
+            case MotionEvent.ACTION_DOWN:
+                Log.d(TAG, "ACTION_DOWN: ");
+                break;
+            case MotionEvent.ACTION_MOVE:
+                Log.d(TAG, "ACTION_MOVE: ");
+                break;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        Log.d(TAG, "onInterceptTouchEvent: ");
+
+        return true;
+    }
+
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

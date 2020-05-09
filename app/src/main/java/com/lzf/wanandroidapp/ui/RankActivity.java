@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.lzf.wanandroidapp.R;
@@ -26,7 +28,7 @@ public class RankActivity extends BaseActivity implements RankContact.View {
      * 每页数据的个数
      */
     private static final int pageSize = 20;
-
+    String TAG = "RankActivity";
     private List<Rank> rankList;
     private RankPresenter rankPresenter;
     private RankAdapter mAdapter;
@@ -117,5 +119,49 @@ public class RankActivity extends BaseActivity implements RankContact.View {
     @Override
     public void showError(String errorMsg) {
         loadingLayout.showError();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        Log.d(TAG, "onCreate: ");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
     }
 }

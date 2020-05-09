@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.TransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.base.Constant;
 import com.lzf.wanandroidapp.entity.Article;
@@ -59,6 +61,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         holder.chapterName.setText(article.getChapterName());
         holder.author.setText(article.getAuthor());
         if (!TextUtils.isEmpty(article.getEnvelopePic())) {
+            //
+
             Glide.with(mContext)
                     .load(article.getEnvelopePic())
                     .into(holder.thumbnail);

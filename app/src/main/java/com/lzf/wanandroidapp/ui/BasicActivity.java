@@ -44,10 +44,12 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lzf.wanandroidapp.R;
@@ -92,6 +94,12 @@ public class BasicActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.d(TAG, "onStop: ");
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        Log.d(TAG, "dispatchTouchEvent: ");
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -151,6 +159,12 @@ public class BasicActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void doService() {
+        /*
+        * 1、通过JobScheduler来安排一个后台进程，在之前的进程保活自启动那边文章中就提到过可以用来作为进程唤起的手段
+        * 2、处理一些耗电的任务，设置充电模式下启动，来完成一些耗电后台进程任务
+        * 3、处理一些耗流量任务，设置在不计流量情况下启动，如上传失败的缓存日志，检查更新下载Apk
+        * 4、处理一些耗内存的任务，设置在手机空闲模式下
+        * */
         JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         JobInfo.Builder builder = new JobInfo.Builder(1, new ComponentName(this, WanJobService.class));  //指定哪个JobService执行操作
         builder.setMinimumLatency(TimeUnit.MILLISECONDS.toMillis(10)); //执行的最小延迟时间

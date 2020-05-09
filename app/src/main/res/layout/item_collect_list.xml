@@ -37,7 +37,7 @@
             android:id="@+id/tv_article_chapterName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_article_title"
+            android:layout_below="@+id/tv_title"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="@dimen/dp_10"
             android:layout_marginLeft="@dimen/dp_10"
