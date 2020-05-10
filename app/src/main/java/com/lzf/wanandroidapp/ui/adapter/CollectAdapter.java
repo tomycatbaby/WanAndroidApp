@@ -2,6 +2,8 @@ package com.lzf.wanandroidapp.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import com.lzf.wanandroidapp.entity.Rank;
 import com.lzf.wanandroidapp.ui.ContentActivity;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHolder> {
 
@@ -56,6 +59,12 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
                         mContext, ContentActivity.class);
                 intent.putExtra(Constant.CONTENT_URL_KEY, collect.getLink());
                 intent.putExtra(Constant.CONTENT_TITLE_KEY, collect.getTitle());
+                Executors.newCachedThreadPool();//核心线程数为0，最大线程数为int max
+                Executors.newScheduledThreadPool(1);//最大线程数为 int max
+                Executors.newFixedThreadPool(1);//固定线程数的线程池，但是请求队列最大为int max
+                Executors.newSingleThreadExecutor();//单个线程的线程池，请求队列为int max
+
+                new Thread();
                 mContext.startActivity(intent);
             }
         });
