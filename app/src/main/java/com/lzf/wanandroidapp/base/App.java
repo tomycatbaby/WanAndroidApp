@@ -54,6 +54,7 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         LogsAboutCrashHandler.getInstance().init();
+
     }
 
     public static Context getContext() {

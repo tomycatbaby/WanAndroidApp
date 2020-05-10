@@ -5,24 +5,32 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import androidx.fragment.app.Fragment;
 import androidx.core.app.NotificationCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatDelegate;
+
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import io.reactivex.Flowable;
@@ -37,17 +45,27 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
 import com.google.android.material.navigation.NavigationView;
+
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.Menu;
 
 import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.base.BaseActivity;
 import com.lzf.wanandroidapp.base.SettingUtil;
 import com.lzf.wanandroidapp.ui.activity.CollectActivity;
+import com.lzf.wanandroidapp.ui.home.HomeFragment;
+import com.lzf.wanandroidapp.ui.knowledge.KnowledgeFragment;
+import com.lzf.wanandroidapp.ui.share.ShareFragment;
+import com.lzf.wanandroidapp.ui.slideshow.SlideshowFragment;
+import com.lzf.wanandroidapp.ui.tools.ToolsFragment;
 import com.lzf.wanandroidapp.utils.CalendarReminderUtil;
 import com.lzf.wanandroidapp.utils.WanExecutor;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,28 +73,67 @@ import java.util.Objects;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MainActivity extends BaseActivity {
-
+    String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
     private int FRAGMENT_HOME = 0x01;
     private int FRAGMENT_KNOWLEDGE = 0x02;
-    private int FRAGMENT_NAVIGATION = 0x03;
-    private int FRAGMENT_PROJECT = 0x04;
-    private int FRAGMENT_WECHAT = 0x05;
+    private int FRAGMENT_WECHAT = 0x03;
+    private int FRAGMENT_NAVIGATION = 0x04;
+    private int FRAGMENT_PROJECT = 0x05;
+    private HomeFragment homeFragment;
+    private KnowledgeFragment knowledgeFragment;
+    private SlideshowFragment slideshowFragment;
+    private ShareFragment shareFragment;
+    private ToolsFragment toolsFragment;
+    private Fragment currentFragment;
+    private int mIndex = 1;
     private boolean isBottomShow = true;
+    private NavHostFragment fragment;
     private Toolbar toolbar;
     private FloatingActionButton floatingActionButton;
-    private Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+        Log.d(TAG, "onCreate: ");
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
     }
 
     @Override
@@ -84,13 +141,6 @@ public class MainActivity extends BaseActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
     }
 
     @Override
@@ -111,14 +161,16 @@ public class MainActivity extends BaseActivity {
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        final NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.getHeaderView(0).findViewById(R.id.iv_rank).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent i = new Intent(MainActivity.this, RankActivity.class);
                 startActivity(i);
             }
         });
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -128,10 +180,10 @@ public class MainActivity extends BaseActivity {
                         startActivity(intent);
                         break;
                     case R.id.nav_night_mode:
-                        if (SettingUtil.getIsNightMode()){
+                        if (SettingUtil.getIsNightMode()) {
                             SettingUtil.setNightMode(false);
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                        }else {
+                        } else {
                             SettingUtil.setNightMode(true);
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                         }
@@ -146,7 +198,6 @@ public class MainActivity extends BaseActivity {
                 return false;
             }
         });
-        fragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -181,13 +232,14 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void loaderData() {
-
+        showFragment(FRAGMENT_HOME);
     }
 
     @Override
     public void initVariables() {
 
     }
+
 
     void test() {
         final PublishSubject<Integer> mCityPublish = PublishSubject.create();
@@ -277,7 +329,8 @@ public class MainActivity extends BaseActivity {
 //                startActivity(intent);
     }
 
-    void testNotification() {
+    @Subscribe
+    public void testNotification() {
         //在Android 8.0 也就是API26以上的通知适配，升级项目的targetSdkVersion到26，也就是Android 8.0开始你会发现曾经的通知代码会进行废弃方法提示
         //那好我们必须的学习下通知渠道的适配了
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -350,29 +403,79 @@ public class MainActivity extends BaseActivity {
         notificationManager.createNotificationChannel(channel);
     }
 
+    public void hideFragments(FragmentTransaction ft) {
+        if (homeFragment != null) {
+            ft.hide(homeFragment);
+        }
+        if (knowledgeFragment != null) {
+            ft.hide(knowledgeFragment);
+        }
+        if (slideshowFragment != null) {
+            ft.hide(slideshowFragment);
+        }
+        if (shareFragment != null) {
+            ft.hide(shareFragment);
+        }
+        if (toolsFragment != null) {
+            ft.hide(toolsFragment);
+        }
+    }
+
     /**
      * 切换碎片
      *
      * @param index
      */
     public void showFragment(int index) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        hideFragments(fragmentTransaction);
+        mIndex = index;
         switch (index) {
             case 1:
                 toolbar.setTitle(getString(R.string.app_name));
+                if (homeFragment == null) {
+                    homeFragment = new HomeFragment();
+                    fragmentTransaction.add(R.id.content_main, homeFragment, "home");
+                } else {
+                    fragmentTransaction.show(homeFragment);
+                }
                 break;
             case 2:
                 toolbar.setTitle(getString(R.string.knowledge_system));
+                Class s = this.getClass();
+                if (knowledgeFragment == null) {
+                    knowledgeFragment = new KnowledgeFragment();
+                    fragmentTransaction.add(R.id.content_main, knowledgeFragment, "knowledge");
+                } else {
+                    fragmentTransaction.show(knowledgeFragment);
+                }
                 break;
             case 3:
                 toolbar.setTitle(getString(R.string.navigation));
+                if (slideshowFragment == null) {
+                    slideshowFragment = new SlideshowFragment();
+                    fragmentTransaction.add(R.id.content_main, slideshowFragment, "navigation");
+
+                } else {
+                    fragmentTransaction.show(slideshowFragment);
+                }
                 break;
             case 4:
                 toolbar.setTitle(getString(R.string.project));
+                if (shareFragment == null) {
+                    shareFragment = new ShareFragment();
+                    fragmentTransaction.add(R.id.content_main, shareFragment, "share");
+
+                } else {
+                    fragmentTransaction.show(shareFragment);
+                }
                 break;
             case 5:
                 toolbar.setTitle(getString(R.string.wechat));
                 break;
         }
+        fragmentTransaction.commit();
     }
 
     @Override

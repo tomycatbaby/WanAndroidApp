@@ -28,27 +28,26 @@ public class RankPresenter implements RankContact.Presenter {
         observable.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<BaseResponse<BaseListResponseBody<Rank>>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-            }
+                    }
 
-            @Override
-            public void onNext(BaseResponse<BaseListResponseBody<Rank>> baseListResponseBodyBaseResponse) {
-                BaseListResponseBody<Rank> responseBody = baseListResponseBodyBaseResponse.getData();
-                rankView.showRankList(responseBody.getDatas());
+                    @Override
+                    public void onNext(BaseResponse<BaseListResponseBody<Rank>> baseListResponseBodyBaseResponse) {
+                        BaseListResponseBody<Rank> responseBody = baseListResponseBodyBaseResponse.getData();
+                        rankView.showRankList(responseBody.getDatas());
+                    }
 
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        rankView.showError("");
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                rankView.showError("");
-            }
+                    @Override
+                    public void onComplete() {
 
-            @Override
-            public void onComplete() {
-
-            }
-        });
+                    }
+                });
     }
 }

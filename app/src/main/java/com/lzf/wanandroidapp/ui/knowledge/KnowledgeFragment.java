@@ -1,4 +1,4 @@
-package com.lzf.wanandroidapp.ui.gallery;
+package com.lzf.wanandroidapp.ui.knowledge;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,17 +13,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.lzf.wanandroidapp.R;
 
-public class GalleryFragment extends Fragment {
+public class KnowledgeFragment extends Fragment {
 
-    private GalleryViewModel galleryViewModel;
+    private KnowledgeViewModel knowledgeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                ViewModelProviders.of(this).get(GalleryViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
-        final TextView textView = root.findViewById(R.id.text_gallery);
-        galleryViewModel.getText().observe(this, new Observer<String>() {
+        knowledgeViewModel =
+                ViewModelProviders.of(this).get(KnowledgeViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_knowledge, container, false);
+        final TextView textView = root.findViewById(R.id.text_knowledge);
+        knowledgeViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

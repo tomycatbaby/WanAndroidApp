@@ -16,6 +16,10 @@ import android.widget.ImageView;
 
 import com.lzf.wanandroidapp.R;
 
+import org.xmlpull.v1.XmlPullParser;
+
+import javax.xml.parsers.SAXParser;
+
 public class HeaderLayout extends FrameLayout {
     private Context mContext;
     private ImageView headImageView;
@@ -44,9 +48,11 @@ public class HeaderLayout extends FrameLayout {
         mVHeaderContent = view.findViewById(R.id.header_rl_content);
         headImageView = view.findViewById(R.id.dapter_empty_animator);
         headImageView.setImageResource(R.drawable.empty_animator);
+        //帧动画
         AnimationDrawable animation = (AnimationDrawable) headImageView.getDrawable();
         animation.setOneShot(false);//是否重复播放
         animation.start();
+        invalidate();
     }
 
     public int getHeaderContentHeight() {
@@ -77,6 +83,7 @@ public class HeaderLayout extends FrameLayout {
                 setHeaderHeight(animValue);
             }
         });
+
         mHeightAnim.start();
     }
 
