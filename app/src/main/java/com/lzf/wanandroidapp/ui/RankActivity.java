@@ -79,7 +79,7 @@ public class RankActivity extends BaseActivity implements RankContact.View {
 
     @Override
     public void loaderData() {
-        loadingLayout.showLoading();
+
         rankPresenter.getRankList(1);
     }
 
@@ -98,7 +98,7 @@ public class RankActivity extends BaseActivity implements RankContact.View {
 
     @Override
     public void showLoading() {
-
+        loadingLayout.showLoading();
     }
 
     @Override

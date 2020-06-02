@@ -1,5 +1,6 @@
 package com.lzf.wanandroidapp.ui.home;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -60,10 +61,28 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
         mHomePresenter = new HomePresenter(this);
     }
 
+    //调用了hide之后会调用的
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(TAG, "onAttach: ");
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: ");
     }
 
     @Override
@@ -72,18 +91,60 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
         Log.d(TAG, "onResume: ");
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated: ");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView: ");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(TAG, "onDetach: ");
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: ");
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = root.findViewById(R.id.recyclerView);
         refreshLayout = root.findViewById(R.id.swipeRefreshLayout);
         refreshLayout.init();
-        handler = new MyHandler();
         refreshLayout.setOnRefresh(new RefreshLayout.CallBack() {
             @Override
             public void onRefresh() {
                 Log.d(TAG, "onRefresh: ");
-                handler.sendEmptyMessageDelayed(1,1000);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.stop();
+                    }
+                },1000);
             }
         });
         recyclerView.setItemAnimator(null);
@@ -94,14 +155,18 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
         homeAdapter = new HomeAdapter(getActivity(), datas);
         recyclerView.setAdapter(homeAdapter);
         recyclerView.setHasFixedSize(true);
-        mHomePresenter.requestArticle(1);
-        Log.d(TAG, "onCreateView: ");
+        mHomePresenter.requestArticle(0);
         return root;
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -116,13 +181,12 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
 
     @Override
     public void setArticles(List<Article> articles) {
-        Log.d(TAG, "setArticles: ");
         recyclerView.setVisibility(View.VISIBLE);
         datas = articles;
         homeAdapter.setArticles(datas);
         homeAdapter.notifyDataSetChanged();
     }
-    private MyHandler handler;
+    private Handler handler = new Handler();
 
     @Override
     public void showLoading() {
@@ -147,17 +211,5 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
     @Override
     public void showError(String errorMsg) {
 
-    }
-
-    private class MyHandler extends Handler{
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case 1:
-                    Log.d(TAG, "stop: ");
-                    refreshLayout.stop();
-                    break;
-            }
-        }
     }
 }

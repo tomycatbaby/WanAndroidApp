@@ -81,7 +81,7 @@ public class BasicActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Log.d(TAG, "onResume: ");
+        Log.d(TAG, "onResume: "+Math.pow(2,31));
     }
 
     @Override
@@ -148,6 +148,14 @@ public class BasicActivity extends AppCompatActivity {
 //                DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
 //                int screenWidth = dm.widthPixels;
 //                int screenHeight = dm.heightPixels;
+                Log.d("trq", "onClick: ");
+                TextView textView = new TextView(BasicActivity.this);
+                FlowLayout.LayoutParams layoutParams = new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT, FlowLayout.LayoutParams.WRAP_CONTENT);
+                textView.setLayoutParams(layoutParams);
+                textView.setText("先加");
+                flowLayout.addView(textView);
+                flowLayout.removeView(textView);
+                flowLayout.addView(textView);
 
 
             }

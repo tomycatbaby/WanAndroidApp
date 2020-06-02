@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import java.io.UnsupportedEncodingException;
+
 public class SuperTextView extends androidx.appcompat.widget.AppCompatTextView {
     String TAG = "SuperTextView";
 
@@ -40,7 +42,8 @@ public class SuperTextView extends androidx.appcompat.widget.AppCompatTextView {
                 break;
             case MotionEvent.ACTION_DOWN:
                 Log.d(TAG, "ACTION_DOWN 请求拦截掉: ");
-                //getParent().requestDisallowInterceptTouchEvent(true);
+                invalidate();
+                requestLayout();
                 break;
             case MotionEvent.ACTION_MOVE:
                 Log.d(TAG, "ACTION_MOVE: ");

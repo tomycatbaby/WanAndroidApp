@@ -2,13 +2,20 @@ package com.lzf.wanandroidapp.widget;
 
 import android.content.Context;
 
+import androidx.core.view.ViewConfigurationCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.widget.Scroller;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RefreshLayout extends ViewGroup {
 
@@ -17,7 +24,10 @@ public class RefreshLayout extends ViewGroup {
     private boolean mCanRefresh;
 
     private boolean mMultiTask;
-
+    /**
+     * 用于完成滚动操作的实例
+     */
+    private Scroller mScroller;
     private CallBack mCallBack;
 
     /**
@@ -56,12 +66,16 @@ public class RefreshLayout extends ViewGroup {
     //private HeaderLayout.Param mHeaderParam = new HeaderLayout.Param();
     public RefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        ViewConfiguration configuration = ViewConfiguration.get(context);
+
+        // 获取TouchSlop值
+        mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int childCount = getChildCount();
-        Log.d(TAG, "onLayout: "+childCount);
+        Log.d(TAG, "onLayout: " + childCount);
         View vHeader = null;
         View vContent = null;
         for (int i = 0; i < childCount; i++) {
@@ -159,15 +173,15 @@ public class RefreshLayout extends ViewGroup {
                 if (mYDistance == 0f) {
                     break;
                 }
-                fresh();
-//                if (isHeaderActive()) {
-//                    mYDistance *= externForce(mHeaderLayout.getHeaderHeight(),
-//                            mHeaderLayout.getHeaderContentHeight());
-//                }
-//                if (isPullDown(MotionEvent.ACTION_MOVE, mYDistance)) {
-//                    mHeaderLayout.setHeaderHeight((int) (mHeaderLayout.getHeaderHeight() + mYDistance));
-//                    updatePullDownStatus(MotionEvent.ACTION_MOVE);
-//                }
+                //fresh();
+                if (isHeaderActive()) {
+                    mYDistance *= externForce(mHeaderLayout.getHeaderContentHeight(),
+                            mHeaderLayout.getHeaderContentHeight());
+                }
+                if (isPullDown(MotionEvent.ACTION_MOVE, mYDistance)) {
+                    mHeaderLayout.setHeaderHeight((int) (mHeaderLayout.getHeaderContentHeight() + mYDistance));
+                    updatePullDownStatus(MotionEvent.ACTION_MOVE);
+                }
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
@@ -204,11 +218,11 @@ public class RefreshLayout extends ViewGroup {
         }
         switch (action) {
             case MotionEvent.ACTION_MOVE:
-                if (fDisYPos > 0) {//move down
+                if (fDisYPos > mTouchSlop) {//move down
                     if (isContentToTop()) {//pull up
                         return true;
                     }
-                } else if (fDisYPos < 0) {//move up
+                } else if (fDisYPos < mTouchSlop) {//move up
 
                 }
             case MotionEvent.ACTION_UP:
@@ -224,6 +238,7 @@ public class RefreshLayout extends ViewGroup {
     }
 
     public void fresh() {
+        Log.d(TAG, "fresh: ");
         mHeaderLayout.setStatus(HeaderLayout.Status.REFRESH);
     }
 
@@ -251,6 +266,11 @@ public class RefreshLayout extends ViewGroup {
 //                break;
 //        }
         return false;
+    }
+
+    private boolean isHeaderActive() {
+        return isCanRefresh() && HeaderLayout.Status.NORMAL != mHeaderLayout.getStatus() && mHeaderLayout
+                .getHeaderContentHeight() > 0;
     }
 
     public RefreshLayout(Context context) {
@@ -282,6 +302,7 @@ public class RefreshLayout extends ViewGroup {
         }
         return s1;
     }
+
     private void updatePullDownStatus(int action) {
 
         switch (action) {
@@ -307,4 +328,13 @@ public class RefreshLayout extends ViewGroup {
         int x = ViewConfiguration.get(getContext()).getScaledTouchSlop();
         return mCanRefresh;
     }
+
+//    @Override
+//    public void computeScroll() {
+//        // 第三步，重写computeScroll()方法，并在其内部完成平滑滚动的逻辑
+//        if (mScroller.computeScrollOffset()) {
+//            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
+//            invalidate();
+//        }
+//    }
 }

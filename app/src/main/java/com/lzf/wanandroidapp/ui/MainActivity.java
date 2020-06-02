@@ -1,14 +1,18 @@
 package com.lzf.wanandroidapp.ui;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.UiModeManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.PersistableBundle;
 
 import androidx.annotation.NonNull;
@@ -51,10 +55,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.LinearLayout;
 
 import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.base.BaseActivity;
 import com.lzf.wanandroidapp.base.SettingUtil;
+import com.lzf.wanandroidapp.entity.Article;
 import com.lzf.wanandroidapp.ui.activity.CollectActivity;
 import com.lzf.wanandroidapp.ui.home.HomeFragment;
 import com.lzf.wanandroidapp.ui.knowledge.KnowledgeFragment;
@@ -69,7 +75,10 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MainActivity extends BaseActivity {
@@ -92,17 +101,22 @@ public class MainActivity extends BaseActivity {
     private Toolbar toolbar;
     private FloatingActionButton floatingActionButton;
 
+    private Article article = new Article();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        Log.d(TAG, "onCreate: ");
+        Log.d(TAG, "onCreate: " + article.getEnvelopePic());
+        t(article);
+        Log.d(TAG, "onCreate: " + article.getEnvelopePic());
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
         Log.d(TAG, "onStart: ");
     }
 
@@ -143,6 +157,11 @@ public class MainActivity extends BaseActivity {
         return true;
     }
 
+
+    public void t(Article article) {
+        article.setEnvelopePic("lzf");
+    }
+
     @Override
     public void initView() {
         setContentView(R.layout.activity_main);
@@ -156,20 +175,14 @@ public class MainActivity extends BaseActivity {
 //                Intent intent = new Intent(MainActivity.this, H5Activity.class);
 //                startActivity(intent);
 
-                Log.d("lzf", "onClick: ");
                 //testThread();
             }
         });
+        Dialog dialog;
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         final NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.getHeaderView(0).findViewById(R.id.iv_rank).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent i = new Intent(MainActivity.this, RankActivity.class);
-                startActivity(i);
-            }
-        });
+        navigationView.getHeaderView(0);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -194,6 +207,11 @@ public class MainActivity extends BaseActivity {
                         Intent i = new Intent(MainActivity.this, CollectActivity.class);
                         startActivity(i);
                         break;
+                    case R.id.nav_about_us:
+                        Intent i1 = new Intent(MainActivity.this, KtActivity.class);
+                        startActivity(i1);
+                        break;
+
                 }
                 return false;
             }
@@ -276,7 +294,6 @@ public class MainActivity extends BaseActivity {
                 .flatMap(new Function<Integer, ObservableSource<?>>() {
                     @Override
                     public ObservableSource<Integer> apply(Integer integer) throws Exception {
-                        Log.d("lzf", "apply: " + integer);
                         return Observable.just(integer);
                     }
                 }).subscribeOn(Schedulers.io())
@@ -379,11 +396,14 @@ public class MainActivity extends BaseActivity {
 
     private void showNotification() {
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, BasicActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
         Notification notification = new NotificationCompat.Builder(this, "subscribe")
                 .setContentTitle("收到一条订阅消息")
                 .setContentText("地铁沿线30万商铺抢购中！")
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round))
+                .setContentIntent(pendingIntent)
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
                 .build();
@@ -427,6 +447,12 @@ public class MainActivity extends BaseActivity {
      * @param index
      */
     public void showFragment(int index) {
+//        HashMap h;//允许为null的key或value
+//        h.get()
+//        ConcurrentHashMap k;//不允许key或value为空,
+//        Hashtable kl;//不允许value为空，
+//        kl.put()
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         hideFragments(fragmentTransaction);
@@ -480,7 +506,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void showLoading() {
-
     }
 
     @Override

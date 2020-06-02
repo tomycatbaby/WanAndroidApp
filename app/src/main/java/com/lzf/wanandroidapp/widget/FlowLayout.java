@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+
 public class FlowLayout extends ViewGroup {
     String TAG = "FlowLayout";
     public FlowLayout(Context context) {
@@ -24,6 +26,8 @@ public class FlowLayout extends ViewGroup {
     public FlowLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
+
 
     /*
      * 收到事件首先传递到Activity，然后会调用到window的事件分发，从Window到顶级View，传递到ViewGroup的事件分发方法，dispatchTouchEvent，
@@ -56,7 +60,7 @@ public class FlowLayout extends ViewGroup {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         Log.d(TAG, "onInterceptTouchEvent: ");
 
-        return true;
+        return false;
     }
 
 
@@ -64,7 +68,7 @@ public class FlowLayout extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         measureChildren(widthMeasureSpec, heightMeasureSpec);
-
+        Log.d(TAG, "测量: ");
         int measuredWidth = 0, measuredHeight = 0;
 
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -161,6 +165,7 @@ public class FlowLayout extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        Log.d(TAG, "布局: ");
         for (int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
             Rect rect = (Rect) getChildAt(i).getTag();

@@ -2,7 +2,9 @@ package com.lzf.wanandroidapp.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
+
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -10,15 +12,17 @@ import android.view.animation.Animation;
 import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.base.BaseActivity;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 public class SplashActivity extends BaseActivity {
 
     private AlphaAnimation alphaAnimation;
     private View view;
+
     @Override
     public void initView() {
         setContentView(R.layout.activity_splash);
         view = findViewById(R.id.layout_splash);
-
         //补间动画
         alphaAnimation = new AlphaAnimation(0.3F, 1.0F);
         alphaAnimation.setDuration(2000);

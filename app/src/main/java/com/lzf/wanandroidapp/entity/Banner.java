@@ -3,6 +3,8 @@ package com.lzf.wanandroidapp.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Objects;
+
 /**
  * 轮播图
  */
@@ -23,6 +25,7 @@ public class Banner implements Parcelable {
         imagePath = in.readString();
         isVisible = in.readString();
         order = in.readInt();
+
         title = in.readString();
         type = in.readInt();
         url = in.readString();
@@ -138,4 +141,23 @@ public class Banner implements Parcelable {
         dest.writeString(url);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Banner banner = (Banner) o;
+        return id == banner.id &&
+                order == banner.order &&
+                type == banner.type &&
+                Objects.equals(desc, banner.desc) &&
+                Objects.equals(imagePath, banner.imagePath) &&
+                Objects.equals(isVisible, banner.isVisible) &&
+                Objects.equals(title, banner.title) &&
+                Objects.equals(url, banner.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(desc, id, imagePath, isVisible, order, title, type, url);
+    }
 }

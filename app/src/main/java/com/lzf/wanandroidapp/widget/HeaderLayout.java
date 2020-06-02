@@ -96,6 +96,11 @@ public class HeaderLayout extends FrameLayout {
         mHeaderHeight = height;
         mVHeader.getLayoutParams().height = mHeaderHeight;
         mVHeader.requestLayout();
+
+    }
+
+    public int getStatus() {
+        return mStatus;
     }
 
     public void setStatus(int status) {
