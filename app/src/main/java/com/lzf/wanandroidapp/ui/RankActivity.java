@@ -8,8 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
 
+
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+
 import android.os.Bundle;
 import android.util.Log;
+
 import android.view.View;
 
 import com.lzf.wanandroidapp.R;
@@ -98,7 +104,16 @@ public class RankActivity extends BaseActivity implements RankContact.View {
 
     @Override
     public void showLoading() {
+
         loadingLayout.showLoading();
+        Intent i  = new Intent("");
+        i.addCategory("11");
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.setDataAndType(Uri.parse(""),"");
+        PackageManager packageManager = getPackageManager();
+        //去判断是否有这个activity，后面的标志位表示只去判断category声明为default的activity
+        packageManager.resolveActivity(i,PackageManager.MATCH_DEFAULT_ONLY);
+
     }
 
     @Override
