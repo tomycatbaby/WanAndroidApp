@@ -17,7 +17,7 @@ class KtActivity : AppCompatActivity() {
         setContentView(R.layout.activity_kt)
         kotlin_test_button.run {
             setOnClickListener {
-                text = "收到点击事件"
+                text = "收到点击事件X"
                 Log.d(thisFile, "")
             }
         }
@@ -26,7 +26,7 @@ class KtActivity : AppCompatActivity() {
             "1"->{ }
             "2"->{ }
             else -> {
-                Log.d(thisFile, "啥也不是")
+                Log.d(thisFile, "啥也不是X")
 
             }
         }
