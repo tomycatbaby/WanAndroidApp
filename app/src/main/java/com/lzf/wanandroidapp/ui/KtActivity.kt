@@ -19,6 +19,9 @@ class KtActivity : AppCompatActivity() {
 
 
         //Glide.with(this).applyDefaultRequestOptions(RequestOptions.circleCropTransform()).load(R.mipmap.ic_launcher).into(role);
+
+        Glide.with(this).applyDefaultRequestOptions(RequestOptions.circleCropTransform()).load(R.mipmap.ic_launcher_round).into(role);
+
     }
 
 }
