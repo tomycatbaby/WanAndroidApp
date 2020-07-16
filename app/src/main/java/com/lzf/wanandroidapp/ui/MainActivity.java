@@ -56,6 +56,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.base.BaseActivity;
@@ -110,7 +111,6 @@ public class MainActivity extends BaseActivity {
         // menu should be considered as top level destinations.
         Log.d(TAG, "onCreate: " + article.getEnvelopePic());
         t(article);
-        Log.d(TAG, "onCreate: " + article.getEnvelopePic());
     }
 
     @Override
@@ -178,8 +178,13 @@ public class MainActivity extends BaseActivity {
                 //testThread();
             }
         });
-        Dialog dialog;
+        ScrollView scrollView = new ScrollView(this);
+        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
+            }
+        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         final NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.getHeaderView(0);
@@ -208,7 +213,7 @@ public class MainActivity extends BaseActivity {
                         startActivity(i);
                         break;
                     case R.id.nav_about_us:
-                        Intent i1 = new Intent(MainActivity.this, KtActivity.class);
+                        Intent i1 = new Intent(MainActivity.this, TestActivity.class);
                         startActivity(i1);
                         break;
 

@@ -7,6 +7,7 @@
     android:background="?attr/colorPrimary"
     android:clickable="true"
     android:focusable="true"
+    android:fitsSystemWindows="true"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="bottom"
     android:orientation="vertical"
@@ -20,10 +21,11 @@
         android:id="@+id/iv_rank"
         android:layout_width="@dimen/dp_20"
         android:layout_height="@dimen/dp_20"
+        android:layout_margin="10dp"
         android:layout_gravity="end"
         app:srcCompat="@drawable/ic_rank_white_24dp" />
 
-    <ImageView
+    <com.lzf.wanandroidapp.ui.CircleImageView
         android:layout_width="@dimen/avatar_width"
         android:layout_height="@dimen/avatar_height"
         android:layout_gravity="center_horizontal"

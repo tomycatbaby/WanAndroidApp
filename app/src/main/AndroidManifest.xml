@@ -38,6 +38,7 @@
             android:exported="true" />
 
         <activity android:name=".ui.activity.CollectActivity" />
+        <activity android:name=".ui.TestActivity" />
         <activity android:name=".ui.jetpack.StartActivity" />
         <activity
             android:name=".ui.RankActivity"
