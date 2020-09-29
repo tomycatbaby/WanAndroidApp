@@ -92,7 +92,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void joinToMain() {
-        Intent i = new Intent(this, KtActivity.class);
+        Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
         //?
