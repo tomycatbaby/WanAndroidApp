@@ -75,7 +75,6 @@ public class RefreshLayout extends ViewGroup {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int childCount = getChildCount();
-        Log.d(TAG, "onLayout: " + childCount);
         View vHeader = null;
         View vContent = null;
         for (int i = 0; i < childCount; i++) {

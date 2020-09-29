@@ -106,13 +106,13 @@ public class RankActivity extends BaseActivity implements RankContact.View {
     public void showLoading() {
 
         loadingLayout.showLoading();
-        Intent i  = new Intent("");
-        i.addCategory("11");
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.setDataAndType(Uri.parse(""),"");
-        PackageManager packageManager = getPackageManager();
-        //去判断是否有这个activity，后面的标志位表示只去判断category声明为default的activity
-        packageManager.resolveActivity(i,PackageManager.MATCH_DEFAULT_ONLY);
+//        Intent i  = new Intent("");
+//        i.addCategory("11");
+//        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        i.setDataAndType(Uri.parse(""),"");
+//        PackageManager packageManager = getPackageManager();
+//        //去判断是否有这个activity，后面的标志位表示只去判断category声明为default的activity
+//        packageManager.resolveActivity(i,PackageManager.MATCH_DEFAULT_ONLY);
 
     }
 

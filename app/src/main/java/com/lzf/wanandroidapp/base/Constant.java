@@ -21,4 +21,5 @@ public class Constant {
      * login key
      */
     public static final String LOGIN_KEY = "login";
+    public static final String APP_ID = "wxc543e97dc0144148";
 }

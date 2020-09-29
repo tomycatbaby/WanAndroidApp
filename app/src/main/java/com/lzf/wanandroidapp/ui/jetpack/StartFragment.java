@@ -71,15 +71,16 @@ public class StartFragment extends Fragment {
         mViewModel.getLiveData().observe(this, new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-                Log.d("lzf", "onChanged: " + strings.toString());
+                Log.d("lzf", "startFragment: " + strings.toString());
             }
         });
         mViewModel.getMutableLiveData().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Log.d("lzf", "onChanged: " + s);
+                Log.d("lzf", "startFragment: " + s);
             }
         });
+        mViewModel.getMutableLiveData().setValue("我改变了数据");
         DisplayMetrics metrics = getActivity().getResources().getDisplayMetrics();
         // 屏幕的逻辑密度，是密度无关像素（dip）的缩放因子，160dpi是系统屏幕显示的基线，1dip = 1px， 所以，在160dpi的屏幕上，density = 1， 而在一个120dpi屏幕上 density = 0.75。
         float density = metrics.density;

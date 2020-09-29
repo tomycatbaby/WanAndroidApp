@@ -2,8 +2,11 @@ package com.lzf.wanandroidapp.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.graphics.Canvas;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +25,7 @@ import com.lzf.wanandroidapp.ui.ContentActivity;
 
 import java.util.List;
 
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
     private Context mContext;
     private List<Article> articles;
@@ -46,13 +49,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Article article = articles.get(position);
-        if (article.isFresh()){
+        if (article.isFresh()) {
             holder.fresh.setVisibility(View.VISIBLE);
         }
-        if ("1".equals(article.getTop())){
+        if ("1".equals(article.getTop())) {
             holder.fresh.setVisibility(View.VISIBLE);
         }
-        if (article.getTags().size()>0){
+        if (article.getTags().size() > 0) {
             holder.tag.setVisibility(View.VISIBLE);
             holder.tag.setText(article.getTags().get(0).getName());
         }
@@ -67,7 +70,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                     .load(article.getEnvelopePic())
                     .into(holder.thumbnail);
             holder.thumbnail.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             holder.thumbnail.setVisibility(View.GONE);
         }
         holder.view.setOnClickListener(new View.OnClickListener() {
@@ -75,9 +78,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             public void onClick(View v) {
                 Intent intent = new Intent(
                         mContext, ContentActivity.class);
-                intent.putExtra(Constant.CONTENT_URL_KEY,article.getLink());
-                intent.putExtra(Constant.CONTENT_TITLE_KEY,article.getTitle());
-                intent.putExtra(Constant.CONTENT_ID_KEY,article.getId());
+                intent.putExtra(Constant.CONTENT_URL_KEY, article.getLink());
+                intent.putExtra(Constant.CONTENT_TITLE_KEY, article.getTitle());
+                intent.putExtra(Constant.CONTENT_ID_KEY, article.getId());
                 mContext.startActivity(intent);
             }
         });
@@ -114,5 +117,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             chapterName = itemView.findViewById(R.id.tv_article_chapterName);
             like = itemView.findViewById(R.id.iv_like);
         }
+    }
+
+    public void onItemSwiping(Canvas c, RecyclerView.ViewHolder viewHolder,
+                              float dX, float dY, boolean isCurrentlyActive) {
+        Log.d("lzf", "onItemSwiping: dX:"+dX+isCurrentlyActive);
     }
 }

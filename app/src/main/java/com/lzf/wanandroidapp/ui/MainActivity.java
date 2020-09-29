@@ -32,11 +32,13 @@ import android.view.View;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -58,31 +60,50 @@ import android.view.Menu;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.lzf.wanandroidapp.BuildConfig;
 import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.base.BaseActivity;
+import com.lzf.wanandroidapp.base.Constant;
 import com.lzf.wanandroidapp.base.SettingUtil;
 import com.lzf.wanandroidapp.entity.Article;
 import com.lzf.wanandroidapp.ui.activity.CollectActivity;
 import com.lzf.wanandroidapp.ui.home.HomeFragment;
+import com.lzf.wanandroidapp.ui.jetpack.StartActivity;
+import com.lzf.wanandroidapp.ui.jetpack.StartViewModel;
 import com.lzf.wanandroidapp.ui.knowledge.KnowledgeFragment;
 import com.lzf.wanandroidapp.ui.share.ShareFragment;
 import com.lzf.wanandroidapp.ui.slideshow.SlideshowFragment;
 import com.lzf.wanandroidapp.ui.tools.ToolsFragment;
 import com.lzf.wanandroidapp.utils.CalendarReminderUtil;
 import com.lzf.wanandroidapp.utils.WanExecutor;
+import com.tencent.mm.opensdk.modelbase.BaseReq;
+import com.tencent.mm.opensdk.modelbase.BaseResp;
+import com.tencent.mm.opensdk.modelbiz.SubscribeMessage;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.message.PushAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements IWXAPIEventHandler {
     String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
     private int FRAGMENT_HOME = 0x01;
@@ -114,53 +135,21 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        Log.d(TAG, "onStart: ");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d(TAG, "onRestart: ");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: ");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: ");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
-
     public void t(Article article) {
         article.setEnvelopePic("lzf");
     }
+
+    public static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+    public static SimpleDateFormat SDF_FULL = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+    public static SimpleDateFormat SDF_DOT_MINUTE = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.CHINA);
+    private StartViewModel mViewModel;
+    private IWXAPI api;
 
     @Override
     public void initView() {
@@ -168,26 +157,37 @@ public class MainActivity extends BaseActivity {
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(toolbar);
+        PushAgent.getInstance(this).onAppStart();
         FloatingActionButton fab = findViewById(R.id.floating_action_btn);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this, H5Activity.class);
-//                startActivity(intent);
-
-                //testThread();
+                try {
+                    Intent intent = new Intent(MainActivity.this,KtActivity.class);
+                    startActivity(intent);
+                }catch (Exception e){
+                    Log.d("lzf", "onClick: "+e.getMessage());
+                    e.printStackTrace();
+                }
             }
         });
-        ScrollView scrollView = new ScrollView(this);
-        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-            }
-        });
+        api = WXAPIFactory.createWXAPI(getApplicationContext(), Constant.APP_ID, true);
+        api.registerApp(Constant.APP_ID);
+        try {
+            Intent intent = getIntent();
+            api.handleIntent(intent, this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         final NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.getHeaderView(0);
+        navigationView.getHeaderView(0).findViewById(R.id.iv_rank).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, RankActivity.class);
+                startActivity(intent);
+            }
+        });
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -252,6 +252,26 @@ public class MainActivity extends BaseActivity {
 
         });
     }
+
+    @Override
+    public void onReq(BaseReq baseReq) {
+
+    }
+
+    @Override
+    public void onResp(BaseResp baseResp) {
+        SubscribeMessage.Resp resp = (SubscribeMessage.Resp) baseResp;
+        Log.d("wechat", "onResp: " + resp.action);
+    }
+
+    private void TestWechat() {
+        SubscribeMessage.Req req = new SubscribeMessage.Req();
+        req.scene = 100;
+        req.templateID = "lf91KWrKDU9Whdg3gxXrz_za1Y9J30Cemp6pL7dF4k4";
+        boolean result = api.sendReq(req);
+        Log.d("wechat", "TestWechat: " + result);
+    }
+
 
     @Override
     public void loaderData() {
@@ -532,6 +552,8 @@ public class MainActivity extends BaseActivity {
     public void showError(String errorMsg) {
 
     }
+
+
 //
 //    给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
 //

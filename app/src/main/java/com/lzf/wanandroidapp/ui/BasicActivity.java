@@ -12,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.MediaMetadataRetriever;
+import android.media.ThumbnailUtils;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.work.Constraints;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.Worker;
+
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.internal.cache.CacheInterceptor;
@@ -33,6 +36,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.MemoryFile;
+import android.provider.MediaStore;
 import android.provider.SyncStateContract;
 import android.telephony.CellInfo;
 import android.telephony.CellInfoCdma;
@@ -60,6 +64,7 @@ import com.lzf.wanandroidapp.ui.activity.CollectActivity;
 import com.lzf.wanandroidapp.widget.FlowLayout;
 import com.lzf.wanandroidapp.worker.WanWorker;
 
+import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
@@ -81,7 +86,7 @@ public class BasicActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Log.d(TAG, "onResume: "+Math.pow(2,31));
+        Log.d(TAG, "onResume: " + Math.pow(2, 31));
     }
 
     @Override
@@ -100,6 +105,53 @@ public class BasicActivity extends AppCompatActivity {
     public boolean dispatchTouchEvent(MotionEvent ev) {
         Log.d(TAG, "dispatchTouchEvent: ");
         return super.dispatchTouchEvent(ev);
+    }
+
+    public static Bitmap createVideoThumbnail(String filePath, int kind) {
+        Bitmap bitmap = null;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            if (filePath.startsWith("http://")
+                    || filePath.startsWith("https://")
+                    || filePath.startsWith("widevine://")) {
+                retriever.setDataSource(filePath, new Hashtable<String, String>());
+            } else {
+                retriever.setDataSource(filePath);
+            }
+            bitmap = retriever.getFrameAtTime(-1);
+        } catch (RuntimeException ex) {
+            // Assume this is a corrupt video file
+            ex.printStackTrace();
+        }// Assume this is a corrupt video file.
+        finally {
+            try {
+                retriever.release();
+            } catch (RuntimeException ex) {
+                // Ignore failures while cleaning up.
+                ex.printStackTrace();
+            }
+        }
+
+        if (bitmap == null) return null;
+
+        if (kind == MediaStore.Images.Thumbnails.MINI_KIND) {
+            // Scale down the bitmap if it's too large.
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            int max = Math.max(width, height);
+            if (max > 512) {
+                float scale = 512f / max;
+                int w = Math.round(scale * width);
+                int h = Math.round(scale * height);
+                bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
+            }
+        } else if (kind == MediaStore.Images.Thumbnails.MICRO_KIND) {
+            bitmap = ThumbnailUtils.extractThumbnail(bitmap,
+                    96,
+                    96,
+                    ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        }
+        return bitmap;
     }
 
     @Override
@@ -148,14 +200,14 @@ public class BasicActivity extends AppCompatActivity {
 //                DisplayMetrics dm = getApplicationContext().getResources().getDisplayMetrics();
 //                int screenWidth = dm.widthPixels;
 //                int screenHeight = dm.heightPixels;
-                Log.d("trq", "onClick: ");
-                TextView textView = new TextView(BasicActivity.this);
-                FlowLayout.LayoutParams layoutParams = new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT, FlowLayout.LayoutParams.WRAP_CONTENT);
-                textView.setLayoutParams(layoutParams);
-                textView.setText("先加");
-                flowLayout.addView(textView);
-                flowLayout.removeView(textView);
-                flowLayout.addView(textView);
+//                Log.d("trq", "onClick: ");
+//                TextView textView = new TextView(BasicActivity.this);
+//                FlowLayout.LayoutParams layoutParams = new FlowLayout.LayoutParams(FlowLayout.LayoutParams.WRAP_CONTENT, FlowLayout.LayoutParams.WRAP_CONTENT);
+//                textView.setLayoutParams(layoutParams);
+//                textView.setText("先加");
+//                flowLayout.addView(textView);
+//                flowLayout.removeView(textView);
+//                flowLayout.addView(textView);
 
 
             }
@@ -168,11 +220,11 @@ public class BasicActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void doService() {
         /*
-        * 1、通过JobScheduler来安排一个后台进程，在之前的进程保活自启动那边文章中就提到过可以用来作为进程唤起的手段
-        * 2、处理一些耗电的任务，设置充电模式下启动，来完成一些耗电后台进程任务
-        * 3、处理一些耗流量任务，设置在不计流量情况下启动，如上传失败的缓存日志，检查更新下载Apk
-        * 4、处理一些耗内存的任务，设置在手机空闲模式下
-        * */
+         * 1、通过JobScheduler来安排一个后台进程，在之前的进程保活自启动那边文章中就提到过可以用来作为进程唤起的手段
+         * 2、处理一些耗电的任务，设置充电模式下启动，来完成一些耗电后台进程任务
+         * 3、处理一些耗流量任务，设置在不计流量情况下启动，如上传失败的缓存日志，检查更新下载Apk
+         * 4、处理一些耗内存的任务，设置在手机空闲模式下
+         * */
         JobScheduler jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         JobInfo.Builder builder = new JobInfo.Builder(1, new ComponentName(this, WanJobService.class));  //指定哪个JobService执行操作
         builder.setMinimumLatency(TimeUnit.MILLISECONDS.toMillis(10)); //执行的最小延迟时间
@@ -226,8 +278,9 @@ public class BasicActivity extends AppCompatActivity {
             }
         }
     }
+
     //匿名共享内存,传递大数据，Intent传递数据限制大小为1MB
-    public void t(){
+    public void t() {
         MemoryFile memoryFile;
         Executor executor = AsyncTask.THREAD_POOL_EXECUTOR;
         executor.execute(new Runnable() {

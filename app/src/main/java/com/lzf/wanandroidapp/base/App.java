@@ -3,6 +3,11 @@ package com.lzf.wanandroidapp.base;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.util.Log;
+
+import com.umeng.commonsdk.UMConfigure;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.PushAgent;
 
 public class App extends Application {
 
@@ -54,6 +59,18 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         LogsAboutCrashHandler.getInstance().init();
+        UMConfigure.init(this, "5f45fe16625cab21451467cf", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "41746723b56bc2e25488affb071e6b4b");
+        PushAgent mPushAgent = PushAgent.getInstance(this);
+        //注册推送服务，每次调用register方法都会回调该接口
+        mPushAgent.register(new IUmengRegisterCallback() {
+            @Override
+            public void onSuccess(String deviceToken) {
+            }
+            @Override
+            public void onFailure(String s, String s1) {
+                Log.i("lzf", s+","+s1+"");
+            }
+        });
 
     }
 

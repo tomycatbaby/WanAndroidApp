@@ -1,0 +1,3 @@
+task sayhello{
+    println 'hello world'
+}

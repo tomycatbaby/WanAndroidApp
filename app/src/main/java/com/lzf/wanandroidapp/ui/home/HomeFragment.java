@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
@@ -156,6 +157,10 @@ public class HomeFragment extends BaseFragment implements HomeContact.View {
         recyclerView.setAdapter(homeAdapter);
         recyclerView.setHasFixedSize(true);
         mHomePresenter.requestArticle(0);
+        //给RecyclerView设置ItemTouchHelper
+        ItemTouchHelperCallback itemTouchHelperCallback = new ItemTouchHelperCallback(homeAdapter);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchHelperCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
         return root;
     }
 
