@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="0dp"
-    android:paddingTop="@dimen/dp_16"
+    android:paddingTop="@dimen/dp_26"
     android:paddingEnd="@dimen/dp_16"
-    android:paddingBottom="@dimen/dp_16">
+    android:paddingBottom="@dimen/dp_26">
 
     <RelativeLayout
         android:id="@+id/rl_ranking"
@@ -16,18 +17,19 @@
 
         <TextView
             android:id="@+id/tv_ranking"
+            tools:text="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:textColor="@color/item_author"
-            tools:text="1" />
+            android:textColor="@color/item_author" />
 
     </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_username"
+        tools:text="iceCola"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -35,17 +37,16 @@
         android:layout_toStartOf="@+id/tv_score"
         android:layout_toEndOf="@+id/rl_ranking"
         android:textColor="@color/item_title"
-        android:textSize="@dimen/sp_16"
-        tools:text="iceCola" />
+        android:textSize="@dimen/sp_16" />
 
     <TextView
         android:id="@+id/tv_score"
+        tools:text="360"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:textColor="@color/colorAccent"
-        android:textSize="@dimen/sp_14"
-        tools:text="360" />
+        android:textSize="@dimen/sp_14" />
 
 </RelativeLayout>

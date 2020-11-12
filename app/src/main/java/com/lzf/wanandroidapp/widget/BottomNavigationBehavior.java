@@ -5,6 +5,8 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.ViewCompat;
+
+import android.os.Debug;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -24,6 +26,7 @@ public class BottomNavigationBehavior extends CoordinatorLayout.Behavior<View> {
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target, int dx, int dy, int[] consumed) {
         if (dy > 0) {// 上滑隐藏
             if (outAnimator == null) {
+                Debug.startMethodTracing();
                 outAnimator = ObjectAnimator.ofFloat(child, "translationY", 0, child.getHeight());
                 outAnimator.setDuration(200);
             }

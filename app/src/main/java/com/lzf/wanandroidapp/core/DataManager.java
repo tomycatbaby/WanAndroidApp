@@ -42,19 +42,4 @@ public class DataManager {
         return observable;
     }
 
-    public Observable<JsonObject> login(String page, String id) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl("https://www.wanandroid.com/")
-                .build();
-        GeeksApis geeksApis = retrofit.create(GeeksApis.class);
-        Observable<JsonObject> observable = geeksApis.login(page, id).doOnNext(new Consumer<JsonObject>() {
-            @Override
-            public void accept(JsonObject jsonObject) {
-
-            }
-        });
-        return observable;
-    }
 }

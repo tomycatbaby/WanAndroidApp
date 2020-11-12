@@ -2,25 +2,25 @@
 <com.lzf.wanandroidapp.widget.LoadingLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_refresh"
+    android:id="@+id/loading_refresh"
     android:layout_width="match_parent"
     app:emptyView="@layout/empty_view"
     app:errorView="@layout/error_view"
     app:loadingView="@layout/loading_view"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/srl_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/viewBackground">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/rv_data"
             style="@style/RecyclerViewStyle"
             tools:listitem="@layout/item_rank_list" />
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 </com.lzf.wanandroidapp.widget.LoadingLayout>

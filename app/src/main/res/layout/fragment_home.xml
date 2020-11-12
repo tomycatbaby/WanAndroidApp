@@ -5,19 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-
-    <com.lzf.wanandroidapp.widget.RefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="44dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="首页"
+        app:titleTextColor="@color/White">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/item_home_list" />
+    </androidx.appcompat.widget.Toolbar>
 
-    </com.lzf.wanandroidapp.widget.RefreshLayout>
+    <include
+        layout="@layout/fragment_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

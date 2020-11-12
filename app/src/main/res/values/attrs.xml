@@ -12,4 +12,20 @@
         <attr name="civ_border_overlay" format="boolean" />
         <attr name="civ_circle_background_color" format="color" />
     </declare-styleable>
+    <declare-styleable name="CircularProgressView">
+        <attr name="backWidth" format="dimension" />
+        <attr name="progWidth" format="dimension" />
+        <attr name="backColor" format="color" />
+        <attr name="progColor" format="color" />
+        <attr name="progStartColor" format="color" />
+        <attr name="progFirstColor" format="color" />
+        <attr name="progress" format="integer" />
+
+    </declare-styleable>
+    
+    <declare-styleable name="TopLayout">
+        <attr name="tl_left_image" format="reference"/>
+        <attr name="tl_right_image" format="reference"/>
+        <attr name="tl_title" format="string"/>
+    </declare-styleable>
 </resources>

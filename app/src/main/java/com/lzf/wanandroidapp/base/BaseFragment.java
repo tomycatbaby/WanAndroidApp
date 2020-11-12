@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public abstract class BaseFragment extends Fragment implements IView{
+public abstract class BaseFragment extends Fragment implements IView {
     /**
      * 初始化控件
      */
@@ -25,7 +25,6 @@ public abstract class BaseFragment extends Fragment implements IView{
      */
     public abstract void initVariables();
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +32,5 @@ public abstract class BaseFragment extends Fragment implements IView{
         initView();
         loaderData();
     }
-
 
 }

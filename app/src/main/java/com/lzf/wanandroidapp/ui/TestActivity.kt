@@ -2,6 +2,7 @@ package com.lzf.wanandroidapp.ui
 
 import com.lzf.wanandroidapp.R
 import com.lzf.wanandroidapp.base.BaseActivity
+import com.lzf.wanandroidapp.entity.Rank
 import com.lzf.wanandroidapp.widget.IndicatorDrawable
 import kotlinx.android.synthetic.main.activity_test.*
 
@@ -15,7 +16,9 @@ class TestActivity : BaseActivity() {
     override fun initVariables() {}
     override fun showLoading() {}
     override fun hideLoading() {}
-    override fun showDefaultMsg(msg: String) {}
+    override fun showDefaultMsg(msg: String) {
+
+    }
     override fun showMsg(msg: String) {}
     override fun showError(errorMsg: String) {}
 }

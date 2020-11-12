@@ -14,7 +14,9 @@ public interface HomeContact {
     interface View {
         void scrollTopTop();
         void setBanner(List<Banner> banner);
-        void setArticles(List<Article> articles);
+        void finishRefresh(List<Article> articles);
+        void finishLoadMore(List<Article> articles);
+        void hideLoadMore();
     }
 
     interface Presenter {
@@ -24,7 +26,7 @@ public interface HomeContact {
     }
 
     interface Model {
-        Observable<HttpResult> requestBanner();
+        Observable<BaseResponse<List<Banner>>> requestBanner();
         Observable<BaseResponse<ArticleList>> requestArticle(int num);
     }
 }

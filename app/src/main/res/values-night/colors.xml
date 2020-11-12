@@ -8,7 +8,7 @@
     <color name="windowBackground">@color/Grey900</color>
     <color name="line_divider">@color/Grey700</color>
     <color name="list_divider">@color/Grey600</color>
-
+    <color name="transparent">#00000000</color>
     <color name="common_color">@color/Grey300</color>
     <color name="item_title">@color/Grey300</color>
     <color name="item_author">@color/Grey500</color>
@@ -22,5 +22,8 @@
     <color name="item_flow_layout_bg">@color/Grey700</color>
     <color name="arrow_color">@color/Grey400</color>
     <color name="sticky_header_bg">#515151</color>
-
+    <color name="color_3975f6">#3975f6</color>
+    <color name="color_999999">#999999</color>
+    <color name="color_BBBBBB">#BBBBBB</color>
+    <color name="article_background">#ffffff</color>
 </resources>

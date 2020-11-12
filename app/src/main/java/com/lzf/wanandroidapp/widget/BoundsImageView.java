@@ -14,7 +14,7 @@ public class BoundsImageView extends androidx.appcompat.widget.AppCompatImageVie
     private Paint paint = new Paint();
     private Rect rect = new Rect();
     private int mBorderColor = Color.BLACK;
-    private int mBorderWidth = 0;
+    private int mBorderWidth = 1;
     public BoundsImageView(Context context) {
         super(context);
 
@@ -38,7 +38,7 @@ public class BoundsImageView extends androidx.appcompat.widget.AppCompatImageVie
     private void init() {
         paint.setColor(mBorderColor);
         paint.setAntiAlias(true);
-        paint.setStrokeWidth(mBorderWidth);    //设置画笔宽度
+        paint.setStrokeWidth(1);    //设置画笔宽度
         paint.setStyle(Paint.Style.STROKE);    //设置画笔为线条模式
 
     }

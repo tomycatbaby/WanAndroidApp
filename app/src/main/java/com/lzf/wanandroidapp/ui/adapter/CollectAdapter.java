@@ -2,9 +2,6 @@ package com.lzf.wanandroidapp.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.base.Constant;
 import com.lzf.wanandroidapp.entity.Collect;
-import com.lzf.wanandroidapp.entity.Rank;
-import com.lzf.wanandroidapp.ui.ContentActivity;
+import com.lzf.wanandroidapp.ui.h5.ContentActivity;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -50,14 +46,14 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int i) {
         final Collect collect = collects.get(i);
-        holder.title.setText(collect.getTitle());
+        holder.title.setText(collect.title);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(
                         mContext, ContentActivity.class);
-                intent.putExtra(Constant.CONTENT_URL_KEY, collect.getLink());
-                intent.putExtra(Constant.CONTENT_TITLE_KEY, collect.getTitle());
+                intent.putExtra(Constant.CONTENT_URL_KEY, collect.link);
+                intent.putExtra(Constant.CONTENT_TITLE_KEY, collect.title);
                 Executors.newCachedThreadPool();//核心线程数为0，最大线程数为int max
                 Executors.newScheduledThreadPool(1);//最大线程数为 int max
                 Executors.newFixedThreadPool(1);//固定线程数的线程池，但是请求队列最大为int max

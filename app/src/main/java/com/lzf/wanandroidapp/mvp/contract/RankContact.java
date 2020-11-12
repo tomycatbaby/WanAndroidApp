@@ -12,6 +12,7 @@ import io.reactivex.Observable;
 public interface RankContact {
     interface View extends IView {
         void showRankList(List<Rank> list);
+        void hideLoadMore();
     }
 
     interface Presenter {

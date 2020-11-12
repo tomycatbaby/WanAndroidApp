@@ -22,4 +22,9 @@ public class Constant {
      */
     public static final String LOGIN_KEY = "login";
     public static final String APP_ID = "wxc543e97dc0144148";
+
+    public static final String IS_LOGIN = "is_login";
+    public static final String USERNAME = "username";
+    public static final String COOKIE = "cookie";
+
 }

@@ -11,7 +11,7 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
-    <string name="nav_grade">Send</string>
+    <string name="nav_grade">积分:</string>
     <string name="go_login">去登录</string>
     <string name="app_name">玩Android</string>
     <string name="home">首页</string>
@@ -172,5 +172,6 @@
     <string name="title_activity_basic">BasicActivity</string>
     <string name="title_activity_rank">RankActivity</string>
     <string name="comment">&#160;·&#160;%s了%s</string>
-
+    <string name="author">分享人:%s</string>
+    <string name="time">时间:%s</string>
 </resources>

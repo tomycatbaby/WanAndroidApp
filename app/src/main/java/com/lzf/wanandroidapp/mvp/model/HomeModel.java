@@ -2,9 +2,12 @@ package com.lzf.wanandroidapp.mvp.model;
 
 import com.lzf.wanandroidapp.core.BaseResponse;
 import com.lzf.wanandroidapp.entity.ArticleList;
+import com.lzf.wanandroidapp.entity.Banner;
 import com.lzf.wanandroidapp.entity.HttpResult;
 import com.lzf.wanandroidapp.http.RetrofitHelper;
 import com.lzf.wanandroidapp.mvp.contract.HomeContact;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 
@@ -13,9 +16,9 @@ import io.reactivex.Observable;
  */
 public class HomeModel implements HomeContact.Model {
     @Override
-    public Observable<HttpResult> requestBanner() {
-
-        return null;
+    public Observable<BaseResponse<List<Banner>>> requestBanner() {
+        Observable<BaseResponse<List<Banner>>> observable = RetrofitHelper.getInstance().getApis().getBanner();
+        return observable;
     }
 
     @Override

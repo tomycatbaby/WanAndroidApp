@@ -4,13 +4,18 @@ import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.media.ThumbnailUtils
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
+import android.os.SystemClock
 import android.provider.MediaStore
 import android.util.Log
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.lzf.wanandroidapp.R
 import com.lzf.wanandroidapp.base.BaseActivity
+import com.lzf.wanandroidapp.utils.ResUtils
 import com.lzf.wanandroidapp.utils.WindowUtils
+
 import kotlinx.android.synthetic.main.activity_kt.*
 import java.util.*
 
@@ -49,10 +54,6 @@ class KtActivity : BaseActivity() {
         WindowUtils.setTransparentStatusBar(window)
         WindowUtils.setLightStatus(window)
 
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     fun createVideoThumbnail(filePath: String, kind: Int): Bitmap? {

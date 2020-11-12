@@ -24,7 +24,6 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
      */
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        Log.d("lzf", "getMovementFlags: ");
         // 上下拖动
         int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
         // 向左滑动
@@ -42,7 +41,6 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
      */
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        Log.d("lzf", "onMove: ");
         return true;
     }
     /**
@@ -58,11 +56,12 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        adapter.onItemSwiping(c,viewHolder,dX,dY,isCurrentlyActive);
+        //adapter.onItemSwiping(c,viewHolder,dX,dY,isCurrentlyActive);
     }
 
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        Log.d("lzf", "clearView: ");
+        super.clearView(recyclerView, viewHolder);
+        //adapter.onItemSwipeClear(viewHolder);
     }
 }

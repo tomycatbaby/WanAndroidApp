@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/viewBackground"
+    android:paddingBottom="@dimen/dp_10"
+    android:paddingTop="@dimen/dp_10">
+
+    <TextView
+        android:id="@+id/tv_article_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:gravity="top|start"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="2"
+        tools:text="数据库还可以这么看？（Android Studio 4.1 新特性）"
+        android:paddingBottom="@dimen/dp_6"
+        android:textColor="@color/item_title"
+        android:textSize="@dimen/item_tv_title" />
+
+    <TextView
+        android:id="@+id/tv_article_author"
+        tools:text="分享人：君子不动手"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:maxEms="11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_article_title"
+        android:textColor="@color/color_666666"
+        android:textSize="@dimen/item_tv_author" />
+
+    <TextView
+        android:id="@+id/tv_article_date"
+        tools:text="时间：2020年10月29日15:59:01"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_article_title"
+        android:layout_toEndOf="@+id/tv_article_author"
+        android:textColor="@color/item_date"
+        android:textSize="@dimen/item_tv_date" />
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:orientation="horizontal">-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/iv_like"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:srcCompat="@drawable/ic_like_not" />-->
+
+<!--    </LinearLayout>-->
+</RelativeLayout>

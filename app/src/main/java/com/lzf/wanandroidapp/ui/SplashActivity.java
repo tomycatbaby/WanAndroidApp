@@ -1,5 +1,6 @@
 package com.lzf.wanandroidapp.ui;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +9,15 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
+import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 
 import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.base.BaseActivity;
@@ -20,15 +27,44 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends Activity {
 
     private AlphaAnimation alphaAnimation;
+    private RotateAnimation rotateAnimation;
+    private ScaleAnimation scaleAnimation;
+    private TranslateAnimation translateAnimation;
     private View view;
 
+
     @Override
-    public void initView() {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_splash);
         view = findViewById(R.id.layout_splash);
+        final ImageView imageView = findViewById(R.id.iv_logo);
+        //旋转动画
+        rotateAnimation = new RotateAnimation(0f,360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotateAnimation.setFillAfter(true);
+        rotateAnimation.setDuration(2000);
+        rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                joinToMain();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        imageView.startAnimation(rotateAnimation);
+
         //补间动画
         alphaAnimation = new AlphaAnimation(0.3F, 1.0F);
         alphaAnimation.setDuration(2000);
@@ -48,18 +84,8 @@ public class SplashActivity extends BaseActivity {
 
             }
         });
-        view.startAnimation(alphaAnimation);
-    }
 
-    @Override
-    public void loaderData() {
-
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+//        view.startAnimation(alphaAnimation);
     }
 
     // APP_ID 替换为你的应用从官方网站申请到的合法appID
@@ -86,10 +112,6 @@ public class SplashActivity extends BaseActivity {
         }, new IntentFilter(ConstantsAPI.ACTION_REFRESH_WXAPP));
 
     }
-    @Override
-    public void initVariables() {
-
-    }
 
     private void joinToMain() {
         Intent i = new Intent(this, MainActivity.class);
@@ -99,28 +121,5 @@ public class SplashActivity extends BaseActivity {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
-    @Override
-    public void showLoading() {
 
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void showDefaultMsg(String msg) {
-
-    }
-
-    @Override
-    public void showMsg(String msg) {
-
-    }
-
-    @Override
-    public void showError(String errorMsg) {
-
-    }
 }

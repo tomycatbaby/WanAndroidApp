@@ -1,5 +1,6 @@
 package com.lzf.wanandroidapp.ui;
 
+import androidx.annotation.NonNull;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,21 +26,27 @@ import com.lzf.wanandroidapp.mvp.contract.RankContact;
 import com.lzf.wanandroidapp.mvp.presenter.RankPresenter;
 import com.lzf.wanandroidapp.ui.adapter.RankAdapter;
 import com.lzf.wanandroidapp.widget.LoadingLayout;
+import com.lzf.wanandroidapp.widget.WanRefreshFooter;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshFooter;
+import com.scwang.smartrefresh.layout.api.RefreshKernel;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.constant.RefreshState;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RankActivity extends BaseActivity implements RankContact.View {
-    /**
-     * 每页数据的个数
-     */
-    private static final int pageSize = 20;
+
     String TAG = "RankActivity";
-    private List<Rank> rankList;
     private RankPresenter rankPresenter;
     private RankAdapter mAdapter;
     private RecyclerView rankListView;
     private LoadingLayout loadingLayout;
+    private SmartRefreshLayout refreshLayout;
+    private int curPage = 1;
 
     @Override
     public void initView() {
@@ -48,16 +55,9 @@ public class RankActivity extends BaseActivity implements RankContact.View {
         toolbar.setTitle(getString(R.string.score_list));
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        rankListView = findViewById(R.id.recyclerView);
-        loadingLayout = findViewById(R.id.fragment_refresh);
-        final SwipeRefreshLayout refreshLayout = findViewById(R.id.swipeRefreshLayout);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshLayout.setRefreshing(false);
-            }
-        });
-
+        rankListView = findViewById(R.id.rv_data);
+        loadingLayout = findViewById(R.id.loading_refresh);
+        refreshLayout = findViewById(R.id.srl_refresh);
         actionBar.setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +69,15 @@ public class RankActivity extends BaseActivity implements RankContact.View {
         rankListView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         rankListView.setLayoutManager(linearLayoutManager);
-
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+                curPage++;
+                loaderData();
+            }
+        });
+        refreshLayout.setEnableLoadMore(true);
+        refreshLayout.setRefreshFooter(new WanRefreshFooter(this));
     }
 
     @Override
@@ -77,16 +85,15 @@ public class RankActivity extends BaseActivity implements RankContact.View {
         rankPresenter = new RankPresenter(this);
         List<Rank> list = new ArrayList<>();
 
-        mAdapter = new RankAdapter(this,list);
+        mAdapter = new RankAdapter(R.layout.item_rank_list, list);
         rankListView.setAdapter(mAdapter);
+        showLoading();
     }
-
 
 
     @Override
     public void loaderData() {
-
-        rankPresenter.getRankList(1);
+        rankPresenter.getRankList(curPage);
     }
 
     @Override
@@ -97,9 +104,19 @@ public class RankActivity extends BaseActivity implements RankContact.View {
 //        Collections.sort(list);//按字典序排列
 //        Log.d("lzf", " Sorted status: "+list.toString());
 
-        mAdapter.setRanks(list);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.addData(list);
         loadingLayout.showContent();
+    }
+
+    @Override
+    public void hideLoadMore() {
+        //refreshLayout.setEnableLoadMore(false);
+        refreshLayout.finishLoadMore();
+    }
+
+    @Override
+    public void hideLoading() {
+        refreshLayout.finishLoadMore();
     }
 
     @Override
@@ -116,10 +133,6 @@ public class RankActivity extends BaseActivity implements RankContact.View {
 
     }
 
-    @Override
-    public void hideLoading() {
-
-    }
 
     @Override
     public void showDefaultMsg(String msg) {
@@ -134,49 +147,5 @@ public class RankActivity extends BaseActivity implements RankContact.View {
     @Override
     public void showError(String errorMsg) {
         loadingLayout.showError();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        Log.d(TAG, "onCreate: ");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: ");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d(TAG, "onRestart: ");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: ");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause: ");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop: ");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: ");
     }
 }

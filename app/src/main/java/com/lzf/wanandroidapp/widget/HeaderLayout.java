@@ -56,7 +56,6 @@ public class HeaderLayout extends FrameLayout {
     }
 
     public int getHeaderContentHeight() {
-        Log.d("trq", "getHeaderHeight: "+mVHeaderContent.getMeasuredHeight());
         return mVHeaderContent.getMeasuredHeight();
     }
 

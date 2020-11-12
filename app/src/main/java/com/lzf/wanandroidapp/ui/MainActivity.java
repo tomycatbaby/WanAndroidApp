@@ -1,29 +1,22 @@
 package com.lzf.wanandroidapp.ui;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.UiModeManager;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.PersistableBundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import androidx.fragment.app.Fragment;
 import androidx.core.app.NotificationCompat;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.util.Log;
@@ -32,12 +25,7 @@ import android.view.View;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
@@ -52,53 +40,39 @@ import io.reactivex.subjects.PublishSubject;
 
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
-import com.lzf.wanandroidapp.BuildConfig;
 import com.lzf.wanandroidapp.R;
 import com.lzf.wanandroidapp.base.BaseActivity;
 import com.lzf.wanandroidapp.base.Constant;
 import com.lzf.wanandroidapp.base.SettingUtil;
 import com.lzf.wanandroidapp.entity.Article;
+import com.lzf.wanandroidapp.entity.Rank;
 import com.lzf.wanandroidapp.ui.activity.CollectActivity;
 import com.lzf.wanandroidapp.ui.home.HomeFragment;
-import com.lzf.wanandroidapp.ui.jetpack.StartActivity;
 import com.lzf.wanandroidapp.ui.jetpack.StartViewModel;
 import com.lzf.wanandroidapp.ui.knowledge.KnowledgeFragment;
+import com.lzf.wanandroidapp.ui.mine.MineFragment;
 import com.lzf.wanandroidapp.ui.share.ShareFragment;
-import com.lzf.wanandroidapp.ui.slideshow.SlideshowFragment;
-import com.lzf.wanandroidapp.ui.tools.ToolsFragment;
+import com.lzf.wanandroidapp.ui.wxarticle.WXArticleFragment;
 import com.lzf.wanandroidapp.utils.CalendarReminderUtil;
 import com.lzf.wanandroidapp.utils.WanExecutor;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelbiz.SubscribeMessage;
-import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.umeng.message.PushAgent;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -106,69 +80,50 @@ import java.util.regex.Pattern;
 public class MainActivity extends BaseActivity implements IWXAPIEventHandler {
     String TAG = "MainActivity";
     private AppBarConfiguration mAppBarConfiguration;
-    private int FRAGMENT_HOME = 0x01;
-    private int FRAGMENT_KNOWLEDGE = 0x02;
-    private int FRAGMENT_WECHAT = 0x03;
-    private int FRAGMENT_NAVIGATION = 0x04;
-    private int FRAGMENT_PROJECT = 0x05;
+    private final int FRAGMENT_HOME = 0x01;
+    private final int FRAGMENT_KNOWLEDGE = 0x02;
+    private final int FRAGMENT_WECHAT = 0x03;
+    private final int FRAGMENT_NAVIGATION = 0x04;
+    private final int FRAGMENT_MINE = 0x05;
     private HomeFragment homeFragment;
     private KnowledgeFragment knowledgeFragment;
-    private SlideshowFragment slideshowFragment;
+    private WXArticleFragment wxArticleFragment;
     private ShareFragment shareFragment;
-    private ToolsFragment toolsFragment;
-    private Fragment currentFragment;
+    private MineFragment mineFragment;
     private int mIndex = 1;
     private boolean isBottomShow = true;
-    private NavHostFragment fragment;
-    private Toolbar toolbar;
-    private FloatingActionButton floatingActionButton;
 
     private Article article = new Article();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        Log.d(TAG, "onCreate: " + article.getEnvelopePic());
-        t(article);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    public void t(Article article) {
-        article.setEnvelopePic("lzf");
+        super.onCreate(null);
+        Log.d(TAG, "onCreate: "+savedInstanceState);
     }
 
     public static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
     public static SimpleDateFormat SDF_FULL = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
     public static SimpleDateFormat SDF_DOT_MINUTE = new SimpleDateFormat("yyyy.MM.dd HH:mm", Locale.CHINA);
-    private StartViewModel mViewModel;
+
     private IWXAPI api;
 
     @Override
     public void initView() {
-        setContentView(R.layout.activity_main);
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_name));
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.app_bar_main);
         PushAgent.getInstance(this).onAppStart();
         FloatingActionButton fab = findViewById(R.id.floating_action_btn);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    Intent intent = new Intent(MainActivity.this,KtActivity.class);
-                    startActivity(intent);
-                }catch (Exception e){
-                    Log.d("lzf", "onClick: "+e.getMessage());
-                    e.printStackTrace();
-                }
+                reg();
+//                try {
+//                    Intent intent = new Intent(MainActivity.this,KtActivity.class);
+//                    startActivity(intent);
+//                }catch (Exception e){
+//                    Log.d("lzf", "onClick: "+e.getMessage());
+//                    e.printStackTrace();
+//                }
+                Rank r = new Rank();
             }
         });
         api = WXAPIFactory.createWXAPI(getApplicationContext(), Constant.APP_ID, true);
@@ -179,55 +134,50 @@ public class MainActivity extends BaseActivity implements IWXAPIEventHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        final NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.getHeaderView(0).findViewById(R.id.iv_rank).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RankActivity.class);
-                startActivity(intent);
-            }
-        });
+        //final NavigationView navigationView = findViewById(R.id.nav_view);
+//        navigationView.getHeaderView(0).findViewById(R.id.iv_rank).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, RankActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.nav_score:
-                        Intent intent = new Intent(MainActivity.this, BasicActivity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.nav_night_mode:
-                        if (SettingUtil.getIsNightMode()) {
-                            SettingUtil.setNightMode(false);
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                        } else {
-                            SettingUtil.setNightMode(true);
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                        }
-                        getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
-                        recreate();
-                        break;
-                    case R.id.nav_collect:
-                        Intent i = new Intent(MainActivity.this, CollectActivity.class);
-                        startActivity(i);
-                        break;
-                    case R.id.nav_about_us:
-                        Intent i1 = new Intent(MainActivity.this, TestActivity.class);
-                        startActivity(i1);
-                        break;
-
-                }
-                return false;
-            }
-        });
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-
-        toggle.syncState();
+//        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//                switch (menuItem.getItemId()) {
+//                    case R.id.nav_score:
+//                        Intent intent = new Intent(MainActivity.this, BasicActivity.class);
+//                        startActivity(intent);
+//                        break;
+//                    case R.id.nav_night_mode:
+//                        if (SettingUtil.getIsNightMode()) {
+//                            SettingUtil.setNightMode(false);
+//                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//                        } else {
+//                            SettingUtil.setNightMode(true);
+//                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//                        }
+//                        getWindow().setWindowAnimations(R.style.WindowAnimationFadeInOut);
+//                        recreate();
+//                        break;
+//                    case R.id.nav_collect:
+//                        Intent i = new Intent(MainActivity.this, CollectActivity.class);
+//                        startActivity(i);
+//                        break;
+//                    case R.id.nav_about_us:
+//                        Intent i1 = new Intent(MainActivity.this, TestActivity.class);
+//                        startActivity(i1);
+//                        break;
+//
+//                }
+//                return false;
+//            }
+//        });
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
@@ -242,7 +192,7 @@ public class MainActivity extends BaseActivity implements IWXAPIEventHandler {
                         showFragment(FRAGMENT_NAVIGATION);
                         break;
                     case R.id.action_project:
-                        showFragment(FRAGMENT_PROJECT);
+                        showFragment(FRAGMENT_MINE);
                         break;
                     case R.id.action_wechat:
                         showFragment(FRAGMENT_WECHAT);
@@ -251,6 +201,42 @@ public class MainActivity extends BaseActivity implements IWXAPIEventHandler {
             }
 
         });
+    }
+
+    private void reg() {
+        //邮政编码
+        String postCode = "[1-9]\\d{5,}?";
+        //区号-座机号码
+        String areaCode = "\\d{3}-\\d{8}|\\d{4}-\\d{7}";
+        //手机号码
+        String phone = "(?:13\\d|15\\d|18\\d)\\d{5}(\\d{3}|\\*{3})";
+        String text = "邮政编码：440834"+
+                "区号-座机号码: 020-12345678"+
+                "手机号：13536373839"+
+                "邮政编码：440833"+
+                "区号-座机号码: 010-12345678"+
+                "手机号：13536373739";
+
+        Pattern p = Pattern.compile(postCode);
+        Matcher m = p.matcher(text);
+        Log.d(TAG, "文本中包含邮政编码：");
+        while (m.find()){
+            Log.d(TAG, m.group());
+        }
+
+        p = Pattern.compile(areaCode);
+        m= p.matcher(text);
+        Log.d(TAG, "文本中包含区号-座机号码：");
+        while (m.find()){
+            Log.d(TAG, m.group());
+        }
+
+        p = Pattern.compile(phone);
+        m= p.matcher(text);
+        Log.d(TAG, "文本中包含手机号：");
+        while (m.find()){
+            Log.d(TAG, m.group());
+        }
     }
 
     @Override
@@ -284,6 +270,7 @@ public class MainActivity extends BaseActivity implements IWXAPIEventHandler {
     }
 
 
+    @SuppressLint("CheckResult")
     void test() {
         final PublishSubject<Integer> mCityPublish = PublishSubject.create();
         //订阅者，去订阅消息，distinctUntilChanged可以对结果进行过滤，如果重复则不会通知订阅者
@@ -297,20 +284,16 @@ public class MainActivity extends BaseActivity implements IWXAPIEventHandler {
         Flowable<String> flowable = Flowable.just("");
         observable.subscribe();//观察者开始观察
         ArrayList<String> l;
-        ;
         Objects.equals("", "");
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        new Thread(() -> {
 
-                int[] s = new int[]{1, 2, 3, 3, 2, 1, 1};
-                for (int i = 0; i < s.length; i++) {
-                    mCityPublish.onNext(s[i]);
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+            int[] s = new int[]{1, 2, 3, 3, 2, 1, 1};
+            for (int i = 0; i < s.length; i++) {
+                mCityPublish.onNext(s[i]);
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }).start();
@@ -455,14 +438,14 @@ public class MainActivity extends BaseActivity implements IWXAPIEventHandler {
         if (knowledgeFragment != null) {
             ft.hide(knowledgeFragment);
         }
-        if (slideshowFragment != null) {
-            ft.hide(slideshowFragment);
+        if (wxArticleFragment != null) {
+            ft.hide(wxArticleFragment);
         }
         if (shareFragment != null) {
             ft.hide(shareFragment);
         }
-        if (toolsFragment != null) {
-            ft.hide(toolsFragment);
+        if (mineFragment != null) {
+            ft.hide(mineFragment);
         }
     }
 
@@ -484,7 +467,6 @@ public class MainActivity extends BaseActivity implements IWXAPIEventHandler {
         mIndex = index;
         switch (index) {
             case 1:
-                toolbar.setTitle(getString(R.string.app_name));
                 if (homeFragment == null) {
                     homeFragment = new HomeFragment();
                     fragmentTransaction.add(R.id.content_main, homeFragment, "home");
@@ -493,8 +475,6 @@ public class MainActivity extends BaseActivity implements IWXAPIEventHandler {
                 }
                 break;
             case 2:
-                toolbar.setTitle(getString(R.string.knowledge_system));
-                Class s = this.getClass();
                 if (knowledgeFragment == null) {
                     knowledgeFragment = new KnowledgeFragment();
                     fragmentTransaction.add(R.id.content_main, knowledgeFragment, "knowledge");
@@ -503,27 +483,29 @@ public class MainActivity extends BaseActivity implements IWXAPIEventHandler {
                 }
                 break;
             case 3:
-                toolbar.setTitle(getString(R.string.navigation));
-                if (slideshowFragment == null) {
-                    slideshowFragment = new SlideshowFragment();
-                    fragmentTransaction.add(R.id.content_main, slideshowFragment, "navigation");
+                if (wxArticleFragment == null) {
+                    wxArticleFragment = new WXArticleFragment();
+                    fragmentTransaction.add(R.id.content_main, wxArticleFragment, "navigation");
 
                 } else {
-                    fragmentTransaction.show(slideshowFragment);
+                    fragmentTransaction.show(wxArticleFragment);
                 }
                 break;
             case 4:
-                toolbar.setTitle(getString(R.string.project));
                 if (shareFragment == null) {
                     shareFragment = new ShareFragment();
                     fragmentTransaction.add(R.id.content_main, shareFragment, "share");
-
                 } else {
                     fragmentTransaction.show(shareFragment);
                 }
                 break;
             case 5:
-                toolbar.setTitle(getString(R.string.wechat));
+                if (Objects.nonNull(mineFragment)){
+                    fragmentTransaction.show(mineFragment);
+                } else {
+                    mineFragment = new MineFragment();
+                    fragmentTransaction.add(R.id.content_main, mineFragment, "mine");
+                }
                 break;
         }
         fragmentTransaction.commit();
@@ -552,86 +534,5 @@ public class MainActivity extends BaseActivity implements IWXAPIEventHandler {
     public void showError(String errorMsg) {
 
     }
-
-
-//
-//    给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
-//
-//    设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
-//
-//    注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
-//
-//    示例 1:
-//
-//    输入: [7,1,5,3,6,4]
-//    输出: 7
-//    解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
-//    随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
-//    示例 2:
-//
-//    输入: [1,2,3,4,5]
-//    输出: 4
-//    解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
-//    注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
-//    因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
-//    示例 3:
-//
-//    输入: [7,6,4,3,1]
-//    输出: 0
-//    解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
-
-    class Solution {
-        public int maxProfit(int[] prices) {
-            int chiyou = 0;
-            boolean maile = false;
-            int sum = 0;
-            for (int i = 0; i < prices.length - 1; i++) {
-                //小于后一个，去持有股票
-                if (prices[i] < prices[i + 1] && !maile) {
-                    chiyou = prices[i];
-                    maile = true;
-                }
-                //降了，卖出股票
-                if (prices[i] > prices[i + 1] && maile) {
-                    int chajia = prices[i] - chiyou;
-                    sum += chajia;
-                    chiyou = 0;
-                    maile = false;
-                }
-            }
-            if (maile) {
-                int chajia = prices[prices.length - 1] - chiyou;
-                sum += chajia;
-            }
-            return sum;
-        }
-    }
-
-    /*    class Solution {
-            public ListNode removeElements(ListNode head, int val) {
-                ListNode sentinel = new ListNode(0);//前序节点，它的后面的那个就是完成的链表的头结点
-                sentinel.next = head;//伪节点的后序节点的引用指向的是链表头
-
-                ListNode prev = sentinel, curr = head;//当前节点持有需要遍历的链表的头节点引用，前序节点持有伪节点的引用
-                while (curr != null) {
-                    if (curr.val == val)//如果当前节点是需要删除的那个节点
-                        prev.next = curr.next;//就将前序节点指向当前节点的下一个节点
-                    else prev = curr;//不是当前节点，就将前序节点指向当前节点
-                    curr = curr.next;//当前节点向下移一位
-                }
-                return sentinel.next;
-            }
-
-        }
-    */
-    public class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            val = x;
-        }
-    }
-
 
 }

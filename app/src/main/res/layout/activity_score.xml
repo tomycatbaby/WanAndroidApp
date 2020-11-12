@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.RankActivity">
+
+    <com.lzf.wanandroidapp.widget.TopLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        app:tl_title="积分明细"
+        app:tl_left_image="@drawable/back_white" />
+
+    <com.lzf.wanandroidapp.widget.LoadingLayout
+        android:id="@+id/ld_score"
+        android:layout_width="match_parent"
+        app:emptyView="@layout/empty_view"
+        app:errorView="@layout/error_view"
+        app:loadingView="@layout/loading_view"
+        android:layout_height="match_parent">
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/srl_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/viewBackground">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_data"
+                style="@style/RecyclerViewStyle"
+                tools:listitem="@layout/item_rank_list" />
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    </com.lzf.wanandroidapp.widget.LoadingLayout>
+
+
+</LinearLayout>

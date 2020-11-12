@@ -4,27 +4,35 @@
     android:id="@+id/layout_splash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorPrimary">
+    android:background="@color/colorPrimary">
 
-<!--        <com.cxz.wanandroid.widget.CircleImageView-->
-<!--            android:id="@+id/iv_logo"-->
-<!--            android:layout_width="@dimen/dp_110"-->
-<!--            android:layout_height="@dimen/dp_110"-->
-<!--            app:borderColor="@color/white"-->
-<!--            app:borderWidth="2dp"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:srcCompat="@mipmap/logo"-->
-<!--            app:type="circle" />-->
+    <!--        <com.cxz.wanandroid.widget.CircleImageView-->
+    <!--            android:id="@+id/iv_logo"-->
+    <!--            android:layout_width="@dimen/dp_110"-->
+    <!--            android:layout_height="@dimen/dp_110"-->
+    <!--            app:borderColor="@color/white"-->
+    <!--            app:borderWidth="2dp"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent"-->
+    <!--            app:srcCompat="@mipmap/logo"-->
+    <!--            app:type="circle" />-->
     <ImageView
         android:id="@+id/iv_logo"
         android:layout_width="@dimen/dp_110"
         android:layout_height="@dimen/dp_110"
+        android:src="@mipmap/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:src="@mipmap/logo"
         app:layout_constraintTop_toTopOf="parent" />
+
+<!--    <ProgressBar-->
+<!--        android:layout_width="60dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:indeterminateBehavior="repeat"-->
+<!--        android:indeterminateDrawable="@drawable/progressbar_circle_loading"-->
+<!--        android:indeterminateDuration="1000"-->
+<!--        android:padding="12dp" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,9 +5,15 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
+import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.mmkv.MMKV;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
+
+import org.koin.core.Koin;
 
 public class App extends Application {
 
@@ -61,17 +67,24 @@ public class App extends Application {
         LogsAboutCrashHandler.getInstance().init();
         UMConfigure.init(this, "5f45fe16625cab21451467cf", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "41746723b56bc2e25488affb071e6b4b");
         PushAgent mPushAgent = PushAgent.getInstance(this);
+        CrashReport.initCrashReport(getApplicationContext(), "330143809b", true);
+        MMKV.initialize(this);
         //注册推送服务，每次调用register方法都会回调该接口
         mPushAgent.register(new IUmengRegisterCallback() {
             @Override
             public void onSuccess(String deviceToken) {
             }
+
             @Override
             public void onFailure(String s, String s1) {
-                Log.i("lzf", s+","+s1+"");
+                Log.i("lzf", s + "," + s1 + "");
             }
         });
-
+        if (SettingUtil.getIsNightMode()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 
     public static Context getContext() {
